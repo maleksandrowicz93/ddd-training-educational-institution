@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic;
+package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
 public record ProfessorEmploymentConfig(
         int minYearsOfExperience,

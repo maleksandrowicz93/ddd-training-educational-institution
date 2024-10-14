@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic;
+package com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation;
 
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FieldOfStudy;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FieldsOfStudies;

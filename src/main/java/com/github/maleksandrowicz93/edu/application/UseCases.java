@@ -1,16 +1,16 @@
 package com.github.maleksandrowicz93.edu.application;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.CourseCreationApplication;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.CourseOvertakingApplication;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.FacultyCreationApplication;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.ProfessorEmploymentApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseOvertakingApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorEmploymentApplication;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.StudentId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Vacancies;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.StudentEnrollmentAtFacultyApplication;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic.StudentEnrollmentForCourseApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentEnrollmentAtFacultyApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentEnrollmentForCourseApplication;
 
 import java.util.Optional;
 

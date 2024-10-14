@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.educationalInstitution.specyfic;
+package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.StudentId;
