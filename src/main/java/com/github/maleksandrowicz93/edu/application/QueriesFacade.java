@@ -4,25 +4,39 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Cou
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import com.github.maleksandrowicz93.edu.query.course.CourseLeadership;
+import com.github.maleksandrowicz93.edu.query.course.CourseQueryFacade;
 import com.github.maleksandrowicz93.edu.query.course.CourseSummary;
 import com.github.maleksandrowicz93.edu.query.course.StudentsEnrolledFor;
 import com.github.maleksandrowicz93.edu.query.faculty.EmployedProfessors;
+import com.github.maleksandrowicz93.edu.query.faculty.FacultyQueryFacade;
 import com.github.maleksandrowicz93.edu.query.faculty.FacultySummary;
 import com.github.maleksandrowicz93.edu.query.faculty.OpenCourses;
 import com.github.maleksandrowicz93.edu.query.faculty.StudentsEnrolledAt;
 import com.github.maleksandrowicz93.edu.query.professor.LedCourses;
+import com.github.maleksandrowicz93.edu.query.professor.ProfessorQueryFacade;
 import com.github.maleksandrowicz93.edu.query.professor.ProfessorSummary;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Optional;
 
+import static lombok.AccessLevel.PRIVATE;
+
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class QueriesFacade implements Queries {
 
+    FacultyQueryFacade facultyQueryFacade;
+    ProfessorQueryFacade professorQueryFacade;
+    CourseQueryFacade courseQueryFacade;
+
     public QueriesFacade(QueryInjector injector) {
+        facultyQueryFacade = injector.facultyQueryFacade();
+        professorQueryFacade = injector.professorQueryFacade();
+        courseQueryFacade = injector.courseQueryFacade();
     }
 
     @Override
     public FacultySummary getFacultySummary(FacultyId facultyId) {
-        return null;
+        return facultyQueryFacade.getFacultySummary(facultyId);
     }
 
     @Override
@@ -42,7 +56,7 @@ public class QueriesFacade implements Queries {
 
     @Override
     public ProfessorSummary getProfessorSummary(ProfessorId professorId) {
-        return null;
+        return professorQueryFacade.getProfessorSummary(professorId);
     }
 
     @Override
@@ -52,12 +66,13 @@ public class QueriesFacade implements Queries {
 
     @Override
     public Optional<LedCourses> findLedCoursesBy(ProfessorId professorId) {
-        return null;
+        return professorQueryFacade.findProfessorSummary(professorId)
+                                   .map(ProfessorSummary::ledCourses);
     }
 
     @Override
     public CourseSummary getCourseSummary(CourseId courseId) {
-        return null;
+        return courseQueryFacade.getCourseSummary(courseId);
     }
 
     @Override
@@ -67,7 +82,8 @@ public class QueriesFacade implements Queries {
 
     @Override
     public Optional<CourseLeadership> findLeadershipFor(CourseId courseId) {
-        return Optional.empty();
+        return courseQueryFacade.findCourseSummary(courseId)
+                                .map(CourseSummary::courseLeadership);
     }
 
     @Override
@@ -77,6 +93,7 @@ public class QueriesFacade implements Queries {
 
     @Override
     public Optional<StudentsEnrolledFor> findStudentsEnrolledFor(CourseId courseId) {
-        return Optional.empty();
+        return courseQueryFacade.findCourseSummary(courseId)
+                                .map(CourseSummary::studentsEnrolledFor);
     }
 }
