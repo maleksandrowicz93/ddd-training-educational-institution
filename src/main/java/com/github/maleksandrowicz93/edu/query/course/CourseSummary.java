@@ -1,8 +1,8 @@
 package com.github.maleksandrowicz93.edu.query.course;
 
-import lombok.Builder;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FieldsOfStudies;
+import lombok.Builder;
 
 @Builder(toBuilder = true)
 public record CourseSummary(
