@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership;
 
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
@@ -21,6 +22,7 @@ class CourseLeaderships {
     CourseAvailabilityReadModel courseAvailabilityReadModel;
     CourseAvailabilityFacade courseAvailabilityFacade;
 
+    @Transactional
     boolean createTakenOne(TakenCourseCreationApplication application) {
         var professorId = application.professorId();
         var courseId = application.course().id();
@@ -34,6 +36,7 @@ class CourseLeaderships {
         return false;
     }
 
+    @Transactional
     boolean overtake(CourseOvertakingApplication application) {
         var professorId = application.professorId();
         var courseId = application.courseId();
@@ -52,6 +55,7 @@ class CourseLeaderships {
         return false;
     }
 
+    @Transactional
     void resign(CourseId courseId, ProfessorId professorId) {
         var released = courseAvailabilityFacade.releaseCourse(courseId, professorId);
         if (released) {
@@ -62,12 +66,14 @@ class CourseLeaderships {
         }
     }
 
+    @Transactional
     void resignFromAllBy(ProfessorId professorId) {
         var courseLeadership = LedCourses.FACTORY.apply(professorId);
         inventoryReadModel.findAllItemsByInventoryType(courseLeadership, CourseId::new)
                           .forEach(courseId -> resign(courseId, professorId));
     }
 
+    @Transactional
     void close(CourseId courseId) {
         courseAvailabilityReadModel.findProfessorLeadingCourse(courseId)
                                    .map(LedCourses.FACTORY)

@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,6 +16,7 @@ class FacultyServices {
 
     EducationalInstitutionInventoryFacade inventoryFacade;
 
+    @Transactional
     void open(FacultyServicesSpecification specification) {
         InventoryTypeCreationsFactory.initFor(specification.facultyId())
                                      .addCourseInventory(Capacity.of(specification.coursesCapacity().value()))

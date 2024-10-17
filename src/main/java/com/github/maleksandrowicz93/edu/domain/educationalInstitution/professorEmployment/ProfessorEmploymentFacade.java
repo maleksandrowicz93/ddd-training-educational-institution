@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
@@ -29,6 +30,7 @@ public class ProfessorEmploymentFacade {
     ProfessorEmployment professorEmployment;
     CourseLeadershipFacade courseLeadershipFacade;
 
+    @Transactional
     public Optional<ProfessorId> employProfessor(ProfessorEmploymentApplication application) {
         log.info("Employing professor with application {}", application);
         var facultyId = application.facultyId();
@@ -53,6 +55,7 @@ public class ProfessorEmploymentFacade {
         return maybeEmployed;
     }
 
+    @Transactional
     public void resignFromEmployment(ProfessorId professorId, FacultyId facultyId) {
         log.info("Resigning from employment at faculty {} by professor {}...", facultyId, professorId);
         professorCatalog.deleteById(professorId);

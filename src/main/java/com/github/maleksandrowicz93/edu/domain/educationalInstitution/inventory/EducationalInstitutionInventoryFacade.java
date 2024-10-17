@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.EducationalInstitutionId;
 import com.github.maleksandrowicz93.edu.domain.inventory.InventoryEntryCreation;
 import com.github.maleksandrowicz93.edu.domain.inventory.InventoryFacade;
@@ -23,6 +24,7 @@ public class EducationalInstitutionInventoryFacade {
     InventoryFacade inventoryFacade;
     InventoryTypeCatalog inventoryTypeCatalog;
 
+    @Transactional
     public void createInventoryOfType(InventoryTypeCreation inventoryTypeCreation) {
         var inventoryTypeEntity = InventoryTypeEntityFactory.INSTANCE.apply(inventoryTypeCreation.inventoryType());
         inventoryTypeCatalog.save(inventoryTypeEntity);
@@ -33,6 +35,7 @@ public class EducationalInstitutionInventoryFacade {
         inventoryFacade.createInventoryEntry(inventoryEntryCreation);
     }
 
+    @Transactional
     public void removeInventoryOfType(InventoryType inventoryType) {
         inventoryTypeCatalog.findIdByInventoryType(inventoryType)
                             .ifPresent(inventoryTypeId -> {
@@ -41,6 +44,7 @@ public class EducationalInstitutionInventoryFacade {
                             });
     }
 
+    @Transactional
     public <T extends EducationalInstitutionId> Optional<T> addItemToInventoryOfType(
             InventoryType unitType,
             Function<UUID, T> itemIdFactory
@@ -51,6 +55,7 @@ public class EducationalInstitutionInventoryFacade {
                 : Optional.empty();
     }
 
+    @Transactional
     public boolean addItemToInventoryOfType(
             InventoryType unitType,
             EducationalInstitutionId itemId
@@ -70,6 +75,7 @@ public class EducationalInstitutionInventoryFacade {
         return itemAddingResult.get();
     }
 
+    @Transactional
     public void removeItem(EducationalInstitutionId itemId, InventoryType inventoryType) {
         inventoryTypeCatalog.findIdByInventoryType(inventoryType)
                             .ifPresent(inventoryTypeId -> inventoryFacade.removeItemFromInventoryOfType(
@@ -78,6 +84,7 @@ public class EducationalInstitutionInventoryFacade {
                             ));
     }
 
+    @Transactional
     public boolean changeCapacityOfInventoryOfType(InventoryType inventoryType, Capacity capacity) {
         var capacityChangeResult = new AtomicBoolean(false);
         inventoryTypeCatalog.findIdByInventoryType(inventoryType)

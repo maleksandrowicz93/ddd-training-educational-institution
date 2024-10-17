@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
@@ -28,6 +29,7 @@ public class CourseCreationFacade {
     CourseCreation courseCreation;
     CourseEnrollments courseEnrollments;
 
+    @Transactional
     public Optional<CourseId> createCourseByProfessor(CourseCreationByProfessorApplication application) {
         log.info("Creating course for application {}...", application);
         var maybeCreated = courseCreation.createByProfessor(application);
@@ -42,6 +44,7 @@ public class CourseCreationFacade {
         return maybeCreated.map(CourseCatalogEntry::id);
     }
 
+    @Transactional
     public boolean closeCourse(CourseId courseId, FacultyId facultyId) {
         log.info("Closing course {}...", courseId);
         var course = courseCatalog.getById(courseId);

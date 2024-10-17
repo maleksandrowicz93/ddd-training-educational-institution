@@ -1,12 +1,12 @@
 package com.github.maleksandrowicz93.edu.domain.inventory;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Function;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -32,6 +32,7 @@ public class InventoryFacade {
         inventory.deleteByInventoryTypeId(inventoryTypeId);
     }
 
+    @Transactional
     public boolean addItemToInventoryOfType(InventoryTypeId inventoryTypeId, ItemInstanceId itemInstanceId) {
         log.info("Adding item {} to inventory of type {}...", itemInstanceId, inventoryTypeId);
         var itemAddedResult = new AtomicBoolean(false);
@@ -57,6 +58,7 @@ public class InventoryFacade {
         return itemAddedResult.get();
     }
 
+    @Transactional
     public void removeItemFromInventoryOfType(InventoryTypeId inventoryTypeId, ItemInstanceId itemInstanceId) {
         log.info("Removing item {} from inventory of type {}...", inventoryTypeId, inventoryTypeId);
         inventory.findByInventoryTypeId(inventoryTypeId)
@@ -80,6 +82,7 @@ public class InventoryFacade {
                  );
     }
 
+    @Transactional
     public boolean changeInventoryEntryCapacity(InventoryTypeId inventoryTypeId, Capacity capacity) {
         log.info("Changing inventory of type {} capacity to {}...", inventoryTypeId, capacity);
         var changingCapacityResult = new AtomicBoolean(false);

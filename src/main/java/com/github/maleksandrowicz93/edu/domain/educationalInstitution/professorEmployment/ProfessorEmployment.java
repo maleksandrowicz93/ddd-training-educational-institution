@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryType;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryTypeCreation;
@@ -23,6 +24,7 @@ class ProfessorEmployment {
 
     EducationalInstitutionInventoryFacade inventoryFacade;
 
+    @Transactional
     Optional<ProfessorId> employNewAt(FacultyId facultyId, Capacity professorCapacity) {
         var professorEmployment = EmployedProfessors.FACTORY.apply(facultyId);
         var maybeAdded = inventoryFacade.addItemToInventoryOfType(professorEmployment, ProfessorId::new);
@@ -34,6 +36,7 @@ class ProfessorEmployment {
         return maybeAdded;
     }
 
+    @Transactional
     void resign(ProfessorId professorId, FacultyId facultyId) {
         inventoryFacade.removeInventoryOfType(ProfessorCourses.FACTORY.apply(professorId));
         var professorEmployment = EmployedProfessors.FACTORY.apply(facultyId);

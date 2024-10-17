@@ -9,6 +9,8 @@ interface InventoryTypeCatalog {
 
     void save(InventoryTypeEntity inventoryTypeEntry);
 
+    void deleteById(InventoryTypeId inventoryTypeId);
+
     Optional<InventoryTypeId> findIdByInventoryType(InventoryType inventoryType);
 
     Collection<InventoryTypeEntity> findAllIdsByUnitAndItemTypes(UnitType unitType, ItemType itemType);

@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.Item;
@@ -27,6 +28,7 @@ class StudentEnrollments {
         return inventoryFacade.addItemToInventoryOfType(studentEnrollmentAtFaculty, StudentId::new);
     }
 
+    @Transactional
     void resign(StudentId studentId, FacultyId facultyId) {
         resignFromAllEnrollmentsForCourse(studentId);
         var studentEnrollmentAtFaculty = StudentsEnrolledForFaculty.FACTORY.apply(facultyId);

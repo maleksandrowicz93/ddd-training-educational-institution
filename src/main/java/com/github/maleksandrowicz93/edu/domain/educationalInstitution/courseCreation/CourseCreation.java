@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.TakenCourseCreationApplication;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
@@ -22,6 +23,7 @@ class CourseCreation {
     EducationalInstitutionInventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
 
+    @Transactional
     Optional<CourseCatalogEntry> createByProfessor(CourseCreationByProfessorApplication application) {
         var facultyId = application.facultyId();
         var coursesAtFaculty = OpenCourses.FACTORY.apply(facultyId);
@@ -45,6 +47,7 @@ class CourseCreation {
         return Optional.empty();
     }
 
+    @Transactional
     void close(CourseId courseId, FacultyId facultyId) {
         courseLeadershipFacade.closeCourse(courseId);
         var openCourses = OpenCourses.FACTORY.apply(facultyId);

@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.availability;
 
+import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class AvailabilityFacade {
         availabilityRepo.deleteByResourceId(resourceId);
     }
 
+    @Transactional
     public boolean block(ResourceId resourceId, OwnerId ownerId) {
         log.info("Blocking resource {} by owner {}...", resourceId, ownerId);
         var blockingResult = new AtomicBoolean(false);
@@ -49,6 +51,7 @@ public class AvailabilityFacade {
         return blockingResult.get();
     }
 
+    @Transactional
     public boolean release(ResourceId resourceId, OwnerId ownerId) {
         log.info("Releasing resource {} by owner {}...", resourceId, ownerId);
         var releasingResult = new AtomicBoolean(false);
