@@ -4,6 +4,7 @@ import com.github.maleksandrowicz93.edu.application.ApplicationConfig;
 import com.github.maleksandrowicz93.edu.application.ApplicationServicesFactory;
 import com.github.maleksandrowicz93.edu.application.Injector;
 import com.github.maleksandrowicz93.edu.common.infra.InMemoryAbstractRepo;
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityFacade;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityFactory;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityReadModel;
@@ -33,8 +34,12 @@ public class InjectorFactoryForTests {
     AvailabilityFactory availabilityFactory;
     InventoryFactory inventoryFactory;
     EducationalInstitutionInventoryFactory educationalInstitutionInventoryFactory;
+    NotificationPublisher notificationPublisher;
 
-    public InjectorFactoryForTests(ApplicationConfig applicationConfig) {
+    public InjectorFactoryForTests(
+            ApplicationConfig applicationConfig,
+            NotificationPublisher notificationPublisher
+    ) {
         this.applicationConfig = applicationConfig;
         availabilityFactory = AvailabilityFactory.forTests();
         inventoryFactory = InventoryFactory.forTests();
@@ -42,6 +47,7 @@ public class InjectorFactoryForTests {
                 inventoryReadModel(),
                 inventoryFacade()
         );
+        this.notificationPublisher = notificationPublisher;
     }
 
     public Injector createInjector() {
@@ -53,7 +59,8 @@ public class InjectorFactoryForTests {
                 availabilityFacade(),
                 availabilityReadModel(),
                 educationalInstitutionInventoryReadModel(),
-                educationalInstitutionInventoryFacade()
+                educationalInstitutionInventoryFacade(),
+                notificationPublisher
         );
     }
 

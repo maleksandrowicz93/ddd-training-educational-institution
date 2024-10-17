@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
@@ -28,6 +29,7 @@ public class CourseCreationFacade {
     StudentEnrollmentReadModel studentEnrollmentReadModel;
     CourseCreation courseCreation;
     CourseEnrollments courseEnrollments;
+    NotificationPublisher notificationPublisher;
 
     @Transactional
     public Optional<CourseId> createCourseByProfessor(CourseCreationByProfessorApplication application) {
@@ -58,6 +60,7 @@ public class CourseCreationFacade {
         courseCatalog.deleteById(courseId);
         courseEnrollments.closeFor(courseId);
         courseCreation.close(courseId, facultyId);
+        notificationPublisher.publish(new CourseClosed(courseId, facultyId));
         return true;
     }
 

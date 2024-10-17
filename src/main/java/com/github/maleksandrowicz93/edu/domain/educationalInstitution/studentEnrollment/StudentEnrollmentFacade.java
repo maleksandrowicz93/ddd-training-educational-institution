@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
@@ -22,6 +23,7 @@ public class StudentEnrollmentFacade {
     Rules<StudentEnrollmentAtFacultyContext> enrollmentAtFacultyRules;
     FacultyCatalog facultyCatalog;
     StudentEnrollments studentEnrollments;
+    NotificationPublisher notificationPublisher;
 
     public Optional<StudentId> enrollAtFaculty(StudentEnrollmentAtFacultyApplication application) {
         log.info("Enrolling student at faculty with application {}...", application);
@@ -39,6 +41,7 @@ public class StudentEnrollmentFacade {
     public void resignFromEnrollmentAtFaculty(StudentId studentId, FacultyId facultyId) {
         log.info("Resigning from enrollment at faculty {} by student {}", facultyId, studentId);
         studentEnrollments.resign(studentId, facultyId);
+        notificationPublisher.publish(new StudentResignedFromEnrollmentAtFaculty(studentId, facultyId));
     }
 
     public boolean enrollForCourse(StudentEnrollmentForCourseApplication application) {

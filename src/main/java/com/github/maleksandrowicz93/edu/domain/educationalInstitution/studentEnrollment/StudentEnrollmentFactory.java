@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
@@ -16,6 +17,7 @@ public class StudentEnrollmentFactory {
     FacultyCatalog facultyCatalog;
     EducationalInstitutionInventoryReadModel inventoryReadModel;
     EducationalInstitutionInventoryFacade inventoryFacade;
+    NotificationPublisher notificationPublisher;
 
     public StudentEnrollmentReadModel studentEnrollmentReadModel() {
         return new StudentEnrollmentReadModel(inventoryReadModel);
@@ -25,7 +27,8 @@ public class StudentEnrollmentFactory {
         return new StudentEnrollmentFacade(
                 StudentEnrollmentAtFacultyRulesFactory.from(config).createRules(),
                 facultyCatalog,
-                studentEnrollments()
+                studentEnrollments(),
+                notificationPublisher
         );
     }
 

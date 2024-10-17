@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityFacade;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
@@ -21,6 +22,7 @@ public class CourseLeadershipFactory {
     AvailabilityFacade availabilityFacade;
     EducationalInstitutionInventoryReadModel inventoryReadModel;
     EducationalInstitutionInventoryFacade inventoryFacade;
+    NotificationPublisher notificationPublisher;
 
     public CourseAvailabilityReadModel courseAvailabilityReadModel() {
         return new CourseAvailabilityReadModel(availabilityReadModel);
@@ -35,7 +37,8 @@ public class CourseLeadershipFactory {
                 CourseLeadershipRules.FACTORY.createRules(),
                 professorCatalog,
                 courseCatalog,
-                courseLeaderships()
+                courseLeaderships(),
+                notificationPublisher
         );
     }
 

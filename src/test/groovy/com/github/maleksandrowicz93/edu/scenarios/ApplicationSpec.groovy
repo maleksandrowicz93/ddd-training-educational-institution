@@ -3,14 +3,18 @@ package com.github.maleksandrowicz93.edu.scenarios
 import com.github.maleksandrowicz93.edu.application.ApplicationConfig
 import com.github.maleksandrowicz93.edu.application.QueriesFacade
 import com.github.maleksandrowicz93.edu.application.UseCasesFacade
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseClosed
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseClosingConfig
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationByProfessorApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationConfig
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseOvertakingApplication
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.ProfessorResignedFromCourseLeadership
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationConfig
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorEmploymentApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorEmploymentConfig
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorResignedFromEmployment
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FieldOfStudy
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FieldsOfStudies
@@ -21,6 +25,7 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnr
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentEnrollmentAtFacultyApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentEnrollmentAtFacultyConfig
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentEnrollmentForCourseApplication
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment.StudentResignedFromEnrollmentAtFaculty
 import spock.lang.Specification
 
 class ApplicationSpec extends Specification {
@@ -51,7 +56,8 @@ class ApplicationSpec extends Specification {
     )
 
     //application services factory
-    def factory = new InjectorFactoryForTests(applicationConfig)
+    def notificationPublisher = Mock(NotificationPublisher)
+    def factory = new InjectorFactoryForTests(applicationConfig, notificationPublisher)
     def injector = factory.createInjector()
     def useCases = new UseCasesFacade(injector)
     def queries = new QueriesFacade(injector)
@@ -223,6 +229,8 @@ class ApplicationSpec extends Specification {
             with(queries.leadershipFor(javaCourse)) {
                 isAvailable()
             }
+        and: "notification is published"
+            1 * notificationPublisher.publish(new ProfessorResignedFromCourseLeadership(musk, javaCourse))
 
         when: "zuck applies for java course overtaking"
             def javaCourseOvertakingApplication = new CourseOvertakingApplication(
@@ -255,6 +263,8 @@ class ApplicationSpec extends Specification {
             with(queries.leadershipFor(javaCourse)) {
                 isAvailable()
             }
+        and: "notification is published"
+            1 * notificationPublisher.publish(new ProfessorResignedFromEmployment(zuck, itFaculty))
 
         when: "gates applies for employment again"
             def gates = useCases.employProfessor(gatesEmploymentApplication)
@@ -305,6 +315,8 @@ class ApplicationSpec extends Specification {
             }
             queries.findLeadershipFor(javaCourse)
                    .isEmpty()
+        and: "notification is published"
+            1 * notificationPublisher.publish(new CourseClosed(javaCourse, itFaculty))
 
         when: "gates applies for spring course creation"
             def springCourseCreationApplication = new CourseCreationByProfessorApplication(
@@ -395,6 +407,8 @@ class ApplicationSpec extends Specification {
             with(queries.studentsEnrolledFor(springCourse)) {
                 !contain(mati)
             }
+        and: "notification is published"
+            1 * notificationPublisher.publish(new StudentResignedFromEnrollmentAtFaculty(mati, itFaculty))
 
         when: "Uncle Bob applies for enrollment for spring course again"
             uncleBobEnrolledForSpring = useCases.enrollForCourse(uncleBobEnrollmentForSpringCourseApplication)

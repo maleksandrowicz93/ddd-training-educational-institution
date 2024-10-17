@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
@@ -21,6 +22,7 @@ public class CourseCreationFactory {
     EducationalInstitutionInventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
     StudentEnrollmentReadModel studentEnrollmentReadModel;
+    NotificationPublisher notificationPublisher;
 
     public CourseCreationReadModel courseCreationReadModel() {
         return new CourseCreationReadModel(inventoryReadModel);
@@ -33,7 +35,8 @@ public class CourseCreationFactory {
                 courseCatalog,
                 studentEnrollmentReadModel,
                 courseCreation(),
-                courseEnrollments()
+                courseEnrollments(),
+                notificationPublisher
         );
     }
 

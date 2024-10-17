@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.application;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityFacade;
 import com.github.maleksandrowicz93.edu.domain.availability.AvailabilityReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
@@ -34,7 +35,8 @@ public record ApplicationServicesFactory(
         AvailabilityFacade availabilityFacade,
         AvailabilityReadModel availabilityReadModel,
         EducationalInstitutionInventoryReadModel educationalInstitutionInventoryReadModel,
-        EducationalInstitutionInventoryFacade educationalInstitutionInventoryFacade
+        EducationalInstitutionInventoryFacade educationalInstitutionInventoryFacade,
+        NotificationPublisher notificationPublisher
 ) implements Injector {
 
     //query
@@ -131,7 +133,8 @@ public record ApplicationServicesFactory(
                 applicationConfig.studentEnrollmentAtFacultyConfig(),
                 facultyCatalog,
                 educationalInstitutionInventoryReadModel,
-                educationalInstitutionInventoryFacade
+                educationalInstitutionInventoryFacade,
+                notificationPublisher
         );
     }
 
@@ -142,7 +145,8 @@ public record ApplicationServicesFactory(
                 availabilityReadModel,
                 availabilityFacade,
                 educationalInstitutionInventoryReadModel,
-                educationalInstitutionInventoryFacade
+                educationalInstitutionInventoryFacade,
+                notificationPublisher
         );
     }
 
@@ -153,7 +157,8 @@ public record ApplicationServicesFactory(
                 professorCatalog,
                 educationalInstitutionInventoryReadModel,
                 educationalInstitutionInventoryFacade,
-                courseLeadershipFacade()
+                courseLeadershipFacade(),
+                notificationPublisher
         );
     }
 
@@ -165,7 +170,8 @@ public record ApplicationServicesFactory(
                 educationalInstitutionInventoryReadModel,
                 educationalInstitutionInventoryFacade,
                 courseLeadershipFacade(),
-                studentEnrollmentReadModel()
+                studentEnrollmentReadModel(),
+                notificationPublisher
         );
     }
 }

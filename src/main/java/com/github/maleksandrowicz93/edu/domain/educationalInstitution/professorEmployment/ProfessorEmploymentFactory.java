@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
@@ -20,6 +21,7 @@ public class ProfessorEmploymentFactory {
     EducationalInstitutionInventoryReadModel inventoryReadModel;
     EducationalInstitutionInventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
+    NotificationPublisher notificationPublisher;
 
     public ProfessorEmploymentReadModel professorEmploymentReadModel() {
         return new ProfessorEmploymentReadModel(inventoryReadModel);
@@ -32,7 +34,8 @@ public class ProfessorEmploymentFactory {
                 facultyCatalog,
                 professorCatalog,
                 professorEmployment(),
-                courseLeadershipFacade
+                courseLeadershipFacade,
+                notificationPublisher
         );
     }
 

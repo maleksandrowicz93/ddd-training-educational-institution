@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
@@ -29,6 +30,7 @@ public class ProfessorEmploymentFacade {
     ProfessorCatalog professorCatalog;
     ProfessorEmployment professorEmployment;
     CourseLeadershipFacade courseLeadershipFacade;
+    NotificationPublisher notificationPublisher;
 
     @Transactional
     public Optional<ProfessorId> employProfessor(ProfessorEmploymentApplication application) {
@@ -61,5 +63,6 @@ public class ProfessorEmploymentFacade {
         professorCatalog.deleteById(professorId);
         courseLeadershipFacade.resignFromAllCoursesLeaderships(professorId);
         professorEmployment.resign(professorId, facultyId);
+        notificationPublisher.publish(new ProfessorResignedFromEmployment(professorId, facultyId));
     }
 }

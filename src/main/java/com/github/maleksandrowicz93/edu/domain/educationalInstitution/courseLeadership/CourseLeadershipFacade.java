@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership;
 
+import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog.ProfessorCatalog;
@@ -21,6 +22,7 @@ public class CourseLeadershipFacade {
     ProfessorCatalog professorCatalog;
     CourseCatalog courseCatalog;
     CourseLeaderships courseLeaderships;
+    NotificationPublisher notificationPublisher;
 
     public boolean createTakenCourse(TakenCourseCreationApplication application) {
         log.info("Creating course for application: {}...", application);
@@ -50,6 +52,7 @@ public class CourseLeadershipFacade {
     public void resignFromCourseLeadership(CourseId courseId, ProfessorId professorId) {
         log.info("Resigning from course {} leadership by professor {}...", courseId, professorId);
         courseLeaderships.resign(courseId, professorId);
+        notificationPublisher.publish(new ProfessorResignedFromCourseLeadership(professorId, courseId));
     }
 
     public void resignFromAllCoursesLeaderships(ProfessorId professorId) {
