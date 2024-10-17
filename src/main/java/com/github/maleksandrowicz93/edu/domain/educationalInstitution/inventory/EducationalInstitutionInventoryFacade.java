@@ -35,7 +35,10 @@ public class EducationalInstitutionInventoryFacade {
 
     public void removeInventoryOfType(InventoryType inventoryType) {
         inventoryTypeCatalog.findIdByInventoryType(inventoryType)
-                            .ifPresent(inventoryFacade::deleteInventoryEntryByInventoryTypeId);
+                            .ifPresent(inventoryTypeId -> {
+                                inventoryFacade.deleteInventoryEntryByInventoryTypeId(inventoryTypeId);
+                                inventoryTypeCatalog.deleteById(inventoryTypeId);
+                            });
     }
 
     public <T extends EducationalInstitutionId> Optional<T> addItemToInventoryOfType(
