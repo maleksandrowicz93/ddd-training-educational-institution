@@ -25,12 +25,12 @@ public class StudentEnrollmentFactory {
         return new StudentEnrollmentFacade(
                 StudentEnrollmentAtFacultyRulesFactory.from(config).createRules(),
                 facultyCatalog,
-                studentInventory()
+                studentEnrollments()
         );
     }
 
-    StudentInventory studentInventory() {
-        return new StudentInventory(
+    StudentEnrollments studentEnrollments() {
+        return new StudentEnrollments(
                 inventoryReadModel,
                 inventoryFacade
         );

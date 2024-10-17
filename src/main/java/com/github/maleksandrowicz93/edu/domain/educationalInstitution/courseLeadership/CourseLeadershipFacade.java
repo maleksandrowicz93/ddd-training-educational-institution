@@ -20,9 +20,9 @@ public class CourseLeadershipFacade {
     Rules<CourseTakingContext> courseTakingRules;
     ProfessorCatalog professorCatalog;
     CourseCatalog courseCatalog;
-    CourseLeadershipService courseLeadershipService;
+    CourseLeaderships courseLeaderships;
 
-    public boolean createCourseLeadership(CourseLeadershipCreationApplication application) {
+    public boolean createTakenCourse(TakenCourseCreationApplication application) {
         log.info("Creating course for application: {}...", application);
         var professor = professorCatalog.getBtId(application.professorId());
         var context = new CourseTakingContext(professor, application.course());
@@ -31,7 +31,7 @@ public class CourseLeadershipFacade {
             log.info(result.reason());
             return false;
         }
-        return courseLeadershipService.createCourseLeadership(application);
+        return courseLeaderships.createTakenOne(application);
     }
 
     public boolean overtakeCourse(CourseOvertakingApplication application) {
@@ -44,21 +44,21 @@ public class CourseLeadershipFacade {
             log.info(result.reason());
             return false;
         }
-        return courseLeadershipService.overtakeCourse(application);
+        return courseLeaderships.overtake(application);
     }
 
     public void resignFromCourseLeadership(CourseId courseId, ProfessorId professorId) {
         log.info("Resigning from course {} leadership by professor {}...", courseId, professorId);
-        courseLeadershipService.resignFromCourseLeadership(courseId, professorId);
+        courseLeaderships.resign(courseId, professorId);
     }
 
-    public void resignFromAllCoursesLeadership(ProfessorId professorId) {
+    public void resignFromAllCoursesLeaderships(ProfessorId professorId) {
         log.info("Resigning from all courses leaderships by {}...", professorId);
-        courseLeadershipService.resignFromAllCoursesLeadership(professorId);
+        courseLeaderships.resignFromAllBy(professorId);
     }
 
     public void closeCourse(CourseId courseId) {
         log.info("Closing course {} leadership possibility...", courseId);
-        courseLeadershipService.closeCourse(courseId);
+        courseLeaderships.close(courseId);
     }
 }

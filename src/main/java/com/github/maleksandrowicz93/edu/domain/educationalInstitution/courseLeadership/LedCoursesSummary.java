@@ -17,7 +17,7 @@ public record LedCoursesSummary(
             EducationalInstitutionInventoryEntrySummary<CourseId> inventoryEntrySummary
     ) {
         return new LedCoursesSummary(
-                new ProfessorId(inventoryEntrySummary.inventoryType().unit().id().value()),
+                inventoryEntrySummary.unitId(ProfessorId::new),
                 inventoryEntrySummary.capacity(),
                 inventoryEntrySummary.items()
         );

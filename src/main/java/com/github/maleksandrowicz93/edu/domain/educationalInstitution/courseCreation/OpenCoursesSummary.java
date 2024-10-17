@@ -17,7 +17,7 @@ public record OpenCoursesSummary(
             EducationalInstitutionInventoryEntrySummary<CourseId> inventoryEntrySummary
     ) {
         return new OpenCoursesSummary(
-                new FacultyId(inventoryEntrySummary.inventoryType().unit().id().value()),
+                inventoryEntrySummary.unitId(FacultyId::new),
                 inventoryEntrySummary.capacity(),
                 inventoryEntrySummary.items()
         );

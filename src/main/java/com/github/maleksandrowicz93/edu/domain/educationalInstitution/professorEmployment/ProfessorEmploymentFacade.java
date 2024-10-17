@@ -26,7 +26,7 @@ public class ProfessorEmploymentFacade {
     Rules<ProfessorEmploymentContext> employmentRules;
     FacultyCatalog facultyCatalog;
     ProfessorCatalog professorCatalog;
-    ProfessorInventory professorInventory;
+    ProfessorEmployment professorEmployment;
     CourseLeadershipFacade courseLeadershipFacade;
 
     public Optional<ProfessorId> employProfessor(ProfessorEmploymentApplication application) {
@@ -39,26 +39,24 @@ public class ProfessorEmploymentFacade {
             log.info(result.reason());
             return Optional.empty();
         }
-        var maybeEmployed = professorInventory.addToFaculty(facultyId);
+        var professorCapacity = Capacity.of(config.maxCourseLeaderships());
+        var maybeEmployed = professorEmployment.employNewAt(facultyId, professorCapacity);
         maybeEmployed.ifPresentOrElse(
-                professorId -> {
-                    var professorCapacity = Capacity.of(config.maxCourseLeaderships());
-                    professorInventory.openCourseInventoryFor(professorId, professorCapacity);
-                    var professor = new ProfessorCatalogEntry(
-                            professorId, application.professorName(),
-                            application.fieldsOfStudies()
-                    );
-                    professorCatalog.save(professor);
-                },
+                professorId -> professorCatalog.save(
+                        new ProfessorCatalogEntry(
+                                professorId, application.professorName(),
+                                application.fieldsOfStudies()
+                        )
+                ),
                 () -> log.info("Professor was not employed at faculty {}", facultyId)
         );
         return maybeEmployed;
     }
 
-    public void receiveEmploymentResignation(ProfessorId professorId, FacultyId facultyId) {
+    public void resignFromEmployment(ProfessorId professorId, FacultyId facultyId) {
         log.info("Resigning from employment at faculty {} by professor {}...", facultyId, professorId);
         professorCatalog.deleteById(professorId);
-        courseLeadershipFacade.resignFromAllCoursesLeadership(professorId);
-        professorInventory.removeFromFaculty(professorId, facultyId);
+        courseLeadershipFacade.resignFromAllCoursesLeaderships(professorId);
+        professorEmployment.resign(professorId, facultyId);
     }
 }

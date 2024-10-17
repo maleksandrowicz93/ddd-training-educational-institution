@@ -37,6 +37,5 @@ record CourseClosingRulesFactory(
                             .formatted(context.course().name(), context.course().id())
             );
         }
-
     }
 }

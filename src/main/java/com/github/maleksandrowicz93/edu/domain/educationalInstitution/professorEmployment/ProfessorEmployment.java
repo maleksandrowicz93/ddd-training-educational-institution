@@ -19,22 +19,22 @@ import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-class ProfessorInventory {
+class ProfessorEmployment {
 
     EducationalInstitutionInventoryFacade inventoryFacade;
 
-    Optional<ProfessorId> addToFaculty(FacultyId facultyId) {
+    Optional<ProfessorId> employNewAt(FacultyId facultyId, Capacity professorCapacity) {
         var professorEmployment = EmployedProfessors.FACTORY.apply(facultyId);
-        return inventoryFacade.addItemToInventoryOfType(professorEmployment, ProfessorId::new);
+        var maybeAdded = inventoryFacade.addItemToInventoryOfType(professorEmployment, ProfessorId::new);
+        maybeAdded.ifPresent(professorId -> {
+            var professorCourses = ProfessorCourses.FACTORY.apply(professorId);
+            var inventoryTypeCreation = new InventoryTypeCreation(professorCourses, professorCapacity);
+            inventoryFacade.createInventoryOfType(inventoryTypeCreation);
+        });
+        return maybeAdded;
     }
 
-    void openCourseInventoryFor(ProfessorId professorId, Capacity capacity) {
-        var professorCourses = ProfessorCourses.FACTORY.apply(professorId);
-        var inventoryTypeCreation = new InventoryTypeCreation(professorCourses, capacity);
-        inventoryFacade.createInventoryOfType(inventoryTypeCreation);
-    }
-
-    void removeFromFaculty(ProfessorId professorId, FacultyId facultyId) {
+    void resign(ProfessorId professorId, FacultyId facultyId) {
         inventoryFacade.removeInventoryOfType(ProfessorCourses.FACTORY.apply(professorId));
         var professorEmployment = EmployedProfessors.FACTORY.apply(facultyId);
         inventoryFacade.removeItem(professorId, professorEmployment);
@@ -42,14 +42,14 @@ class ProfessorInventory {
 
     private enum ProfessorCourses implements Function<ProfessorId, InventoryType> {
 
-        FACTORY;
-
-        @Override
-        public InventoryType apply(ProfessorId professorId) {
-            return new InventoryType(
-                    new Unit(professorId, PROFESSOR),
-                    COURSE
-            );
+        FACTORY {
+            @Override
+            public InventoryType apply(ProfessorId professorId) {
+                return new InventoryType(
+                        new Unit(professorId, PROFESSOR),
+                        COURSE
+                );
+            }
         }
     }
 }

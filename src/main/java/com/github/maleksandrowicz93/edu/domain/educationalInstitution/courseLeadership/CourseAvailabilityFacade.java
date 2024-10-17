@@ -16,13 +16,13 @@ class CourseAvailabilityFacade {
 
     AvailabilityFacade availabilityFacade;
 
-    void createBlockedCourse(CourseId courseId, ProfessorId blockedBy) {
+    void createTakenCourse(CourseId courseId, ProfessorId blockedBy) {
         var resourceId = new ResourceId(courseId.value());
         var ownerId = new OwnerId(blockedBy.value());
         availabilityFacade.createBlockedAvailabilityUnitFor(resourceId, ownerId);
     }
 
-    void deleteCourseAvailability(CourseId courseId) {
+    void deleteCourseTakingAvailability(CourseId courseId) {
         var resourceId = new ResourceId(courseId.value());
         availabilityFacade.deleteAvailabilityUnitByResourceId(resourceId);
     }

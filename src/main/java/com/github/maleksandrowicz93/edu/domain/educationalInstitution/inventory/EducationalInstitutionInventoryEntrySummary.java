@@ -17,6 +17,10 @@ public record EducationalInstitutionInventoryEntrySummary<T extends EducationalI
         Collection<T> items
 ) {
 
+    public <ID extends EducationalInstitutionId> ID unitId(Function<UUID, ID> idFactory) {
+        return idFactory.apply(inventoryType.unit().id().value());
+    }
+
     static <T extends EducationalInstitutionId> EducationalInstitutionInventoryEntrySummary<T> from(
             InventoryType inventoryType,
             InventoryEntrySummary inventoryEntrySummary,

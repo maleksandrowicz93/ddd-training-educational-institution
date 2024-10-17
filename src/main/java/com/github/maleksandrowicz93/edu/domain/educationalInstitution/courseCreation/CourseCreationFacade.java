@@ -21,18 +21,19 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class CourseCreationFacade {
 
+    Rules<RestrictingCourseVacationsContext> restrictingCourseVacationsRules;
     Rules<CourseClosingContext> courseClosingRules;
     CourseCatalog courseCatalog;
-    CourseCreationService courseCreationService;
-    CourseEnrollmentService courseEnrollmentService;
     StudentEnrollmentReadModel studentEnrollmentReadModel;
+    CourseCreation courseCreation;
+    CourseEnrollments courseEnrollments;
 
-    public Optional<CourseId> createCourse(CourseCreationApplication application) {
+    public Optional<CourseId> createCourseByProfessor(CourseCreationByProfessorApplication application) {
         log.info("Creating course for application {}...", application);
-        var maybeCreated = courseCreationService.createCourse(application);
+        var maybeCreated = courseCreation.createByProfessor(application);
         maybeCreated.ifPresentOrElse(
                 course -> {
-                    courseEnrollmentService.openEnrollmentsFor(course.id(), application.vacancies());
+                    courseEnrollments.openFor(course.id(), application.vacancies());
                     courseCatalog.save(course);
                 },
                 () -> log.info("Course cannot be created at faculty {}", application.facultyId())
@@ -52,13 +53,19 @@ public class CourseCreationFacade {
             return false;
         }
         courseCatalog.deleteById(courseId);
-        courseEnrollmentService.closeEnrollmentsFor(courseId);
-        courseCreationService.closeCourse(courseId, facultyId);
+        courseEnrollments.closeFor(courseId);
+        courseCreation.close(courseId, facultyId);
         return true;
     }
 
     public boolean restrictMaxVacanciesNumberFor(CourseId courseId, Vacancies vacancies) {
         log.info("Restricting vacancies number to {} for {}...", vacancies, courseId);
-        return courseEnrollmentService.restrictMaxVacanciesNumberFor(courseId, vacancies);
+        var context = new RestrictingCourseVacationsContext(courseId, vacancies);
+        var result = restrictingCourseVacationsRules.examine(context);
+        if (result.isFailed()) {
+            log.info(result.reason());
+            return false;
+        }
+        return courseEnrollments.restrictMaxVacanciesNumberFor(courseId, vacancies);
     }
 }

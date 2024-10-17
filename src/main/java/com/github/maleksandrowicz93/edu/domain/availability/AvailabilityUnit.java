@@ -24,8 +24,8 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
         this(AvailabilityUnitId.newOne(), resourceId, Blockade.by(ownerId));
     }
 
-    static AvailabilityUnit blocked(ResourceId resourceId, OwnerId ownerId) {
-        return new AvailabilityUnit(resourceId, ownerId);
+    static AvailabilityUnit blocked(ResourceId resourceId, OwnerId blockedBy) {
+        return new AvailabilityUnit(resourceId, blockedBy);
     }
 
     boolean block(OwnerId ownerId) {

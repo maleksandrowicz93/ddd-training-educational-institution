@@ -31,12 +31,12 @@ public class ProfessorEmploymentFactory {
                 ProfessorEmploymentRulesFactory.from(professorEmploymentConfig).createRules(),
                 facultyCatalog,
                 professorCatalog,
-                professorInventory(),
+                professorEmployment(),
                 courseLeadershipFacade
         );
     }
 
-    ProfessorInventory professorInventory() {
-        return new ProfessorInventory(inventoryFacade);
+    ProfessorEmployment professorEmployment() {
+        return new ProfessorEmployment(inventoryFacade);
     }
 }

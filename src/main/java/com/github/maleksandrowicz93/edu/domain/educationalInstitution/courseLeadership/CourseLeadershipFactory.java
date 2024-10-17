@@ -32,15 +32,15 @@ public class CourseLeadershipFactory {
 
     public CourseLeadershipFacade courseLeadershipFacade() {
         return new CourseLeadershipFacade(
-                CourseLeadershipRulesFactory.INSTANCE.createRules(),
+                CourseLeadershipRules.FACTORY.createRules(),
                 professorCatalog,
                 courseCatalog,
-                courseLeadershipService()
+                courseLeaderships()
         );
     }
 
-    CourseLeadershipService courseLeadershipService() {
-        return new CourseLeadershipService(
+    CourseLeaderships courseLeaderships() {
+        return new CourseLeaderships(
                 inventoryReadModel,
                 inventoryFacade,
                 courseAvailabilityReadModel(),

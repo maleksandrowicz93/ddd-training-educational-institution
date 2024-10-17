@@ -5,7 +5,7 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Fie
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Vacancies;
 
-public record CourseCreationApplication(
+public record CourseCreationByProfessorApplication(
         FacultyId facultyId,
         ProfessorId professorId,
         String courseName,
@@ -13,7 +13,7 @@ public record CourseCreationApplication(
         Vacancies vacancies
 ) {
 
-    public CourseCreationApplication(
+    public CourseCreationByProfessorApplication(
             FacultyId facultyId,
             ProfessorId professorId,
             String courseName,

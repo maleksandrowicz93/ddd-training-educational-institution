@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.application;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationByProfessorApplication;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseOvertakingApplication;
@@ -50,8 +50,8 @@ public class UseCasesFacade implements UseCases {
     }
 
     @Override
-    public void receiveEmploymentResignation(ProfessorId professorId, FacultyId facultyId) {
-        professorEmploymentFacade.receiveEmploymentResignation(professorId, facultyId);
+    public void resignFromEmployment(ProfessorId professorId, FacultyId facultyId) {
+        professorEmploymentFacade.resignFromEmployment(professorId, facultyId);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class UseCasesFacade implements UseCases {
     }
 
     @Override
-    public void resignFromFacultyEnrollment(StudentId studentId, FacultyId facultyId) {
-        studentEnrollmentFacade.resignFromFacultyEnrollment(studentId, facultyId);
+    public void resignFromEnrollmentAtFaculty(StudentId studentId, FacultyId facultyId) {
+        studentEnrollmentFacade.resignFromEnrollmentAtFaculty(studentId, facultyId);
     }
 
     @Override
@@ -70,13 +70,13 @@ public class UseCasesFacade implements UseCases {
     }
 
     @Override
-    public void resignFromCourseEnrollment(StudentId studentId, CourseId courseId) {
-        studentEnrollmentFacade.resignFromCourseEnrollment(studentId, courseId);
+    public void resignFromEnrollmentForCourse(StudentId studentId, CourseId courseId) {
+        studentEnrollmentFacade.resignFromEnrollmentForCourse(studentId, courseId);
     }
 
     @Override
-    public Optional<CourseId> createCourse(CourseCreationApplication application) {
-        return courseCreationFacade.createCourse(application);
+    public Optional<CourseId> createCourseByProfessor(CourseCreationByProfessorApplication application) {
+        return courseCreationFacade.createCourseByProfessor(application);
     }
 
     @Override

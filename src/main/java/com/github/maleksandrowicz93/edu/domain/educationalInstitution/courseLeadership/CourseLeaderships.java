@@ -14,27 +14,27 @@ import static lombok.AccessLevel.PRIVATE;
 @Slf4j
 @RequiredArgsConstructor(access = PACKAGE)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-class CourseLeadershipService {
+class CourseLeaderships {
 
     EducationalInstitutionInventoryReadModel inventoryReadModel;
     EducationalInstitutionInventoryFacade inventoryFacade;
     CourseAvailabilityReadModel courseAvailabilityReadModel;
     CourseAvailabilityFacade courseAvailabilityFacade;
 
-    public boolean createCourseLeadership(CourseLeadershipCreationApplication application) {
+    boolean createTakenOne(TakenCourseCreationApplication application) {
         var professorId = application.professorId();
         var courseId = application.course().id();
         var courseLeadership = LedCourses.FACTORY.apply(professorId);
-        boolean courseLed = inventoryFacade.addItemToInventoryOfType(courseLeadership, courseId);
+        var courseLed = inventoryFacade.addItemToInventoryOfType(courseLeadership, courseId);
         if (courseLed) {
-            courseAvailabilityFacade.createBlockedCourse(courseId, professorId);
+            courseAvailabilityFacade.createTakenCourse(courseId, professorId);
             return true;
         }
         log.info("Professor {} cannot lead the course {}", professorId, courseId);
         return false;
     }
 
-    public boolean overtakeCourse(CourseOvertakingApplication application) {
+    boolean overtake(CourseOvertakingApplication application) {
         var professorId = application.professorId();
         var courseId = application.courseId();
         var taken = courseAvailabilityFacade.takeCourse(courseId, professorId);
@@ -43,8 +43,8 @@ class CourseLeadershipService {
             return false;
         }
         var courseLeadership = LedCourses.FACTORY.apply(professorId);
-        boolean led = inventoryFacade.addItemToInventoryOfType(courseLeadership, courseId);
-        if (led) {
+        var courseLed = inventoryFacade.addItemToInventoryOfType(courseLeadership, courseId);
+        if (courseLed) {
             return true;
         }
         log.info("Professor {} cannot overtake the course {} because has no capacity", professorId, courseId);
@@ -52,7 +52,7 @@ class CourseLeadershipService {
         return false;
     }
 
-    public void resignFromCourseLeadership(CourseId courseId, ProfessorId professorId) {
+    void resign(CourseId courseId, ProfessorId professorId) {
         var released = courseAvailabilityFacade.releaseCourse(courseId, professorId);
         if (released) {
             var courseLeadership = LedCourses.FACTORY.apply(professorId);
@@ -62,16 +62,16 @@ class CourseLeadershipService {
         }
     }
 
-    public void resignFromAllCoursesLeadership(ProfessorId professorId) {
+    void resignFromAllBy(ProfessorId professorId) {
         var courseLeadership = LedCourses.FACTORY.apply(professorId);
         inventoryReadModel.findAllItemsByInventoryType(courseLeadership, CourseId::new)
-                          .forEach(courseId -> resignFromCourseLeadership(courseId, professorId));
+                          .forEach(courseId -> resign(courseId, professorId));
     }
 
-    public void closeCourse(CourseId courseId) {
+    void close(CourseId courseId) {
         courseAvailabilityReadModel.findProfessorLeadingCourse(courseId)
                                    .map(LedCourses.FACTORY)
                                    .ifPresent(inventoryType -> inventoryFacade.removeItem(courseId, inventoryType));
-        courseAvailabilityFacade.deleteCourseAvailability(courseId);
+        courseAvailabilityFacade.deleteCourseTakingAvailability(courseId);
     }
 }

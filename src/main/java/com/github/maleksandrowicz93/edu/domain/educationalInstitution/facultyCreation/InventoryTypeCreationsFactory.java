@@ -31,17 +31,17 @@ class InventoryTypeCreationsFactory {
     }
 
     InventoryTypeCreationsFactory addCourseInventory(Capacity capacity) {
-        inventoryTypeCreations.add(createInventoryTypeCreation(COURSE, capacity));
+        inventoryTypeCreations.add(toInventoryTypeCreation(COURSE, capacity));
         return this;
     }
 
     InventoryTypeCreationsFactory addProfessorInventory(Capacity capacity) {
-        inventoryTypeCreations.add(createInventoryTypeCreation(PROFESSOR, capacity));
+        inventoryTypeCreations.add(toInventoryTypeCreation(PROFESSOR, capacity));
         return this;
     }
 
     InventoryTypeCreationsFactory addStudentInventory(Capacity capacity) {
-        inventoryTypeCreations.add(createInventoryTypeCreation(STUDENT, capacity));
+        inventoryTypeCreations.add(toInventoryTypeCreation(STUDENT, capacity));
         return this;
     }
 
@@ -49,7 +49,7 @@ class InventoryTypeCreationsFactory {
         return Set.copyOf(inventoryTypeCreations);
     }
 
-    private InventoryTypeCreation createInventoryTypeCreation(
+    private InventoryTypeCreation toInventoryTypeCreation(
             ItemType itemType,
             Capacity capacity
     ) {

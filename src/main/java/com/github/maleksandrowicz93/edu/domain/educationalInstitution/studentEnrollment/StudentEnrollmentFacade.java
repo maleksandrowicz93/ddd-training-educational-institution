@@ -21,7 +21,7 @@ public class StudentEnrollmentFacade {
 
     Rules<StudentEnrollmentAtFacultyContext> enrollmentAtFacultyRules;
     FacultyCatalog facultyCatalog;
-    StudentInventory studentInventory;
+    StudentEnrollments studentEnrollments;
 
     public Optional<StudentId> enrollAtFaculty(StudentEnrollmentAtFacultyApplication application) {
         log.info("Enrolling student at faculty with application {}...", application);
@@ -33,21 +33,21 @@ public class StudentEnrollmentFacade {
             log.info(result.reason());
             return Optional.empty();
         }
-        return studentInventory.addToFaculty(facultyId);
+        return studentEnrollments.enrollNewOneAt(facultyId);
     }
 
-    public void resignFromFacultyEnrollment(StudentId studentId, FacultyId facultyId) {
+    public void resignFromEnrollmentAtFaculty(StudentId studentId, FacultyId facultyId) {
         log.info("Resigning from enrollment at faculty {} by student {}", facultyId, studentId);
-        studentInventory.removeFromFaculty(studentId, facultyId);
+        studentEnrollments.resign(studentId, facultyId);
     }
 
     public boolean enrollForCourse(StudentEnrollmentForCourseApplication application) {
         log.info("Enrolling student fpr course with application {}...", application);
-        return studentInventory.addToCourse(application.studentId(), application.courseId());
+        return studentEnrollments.enrollForCourse(application.studentId(), application.courseId());
     }
 
-    public void resignFromCourseEnrollment(StudentId studentId, CourseId courseId) {
+    public void resignFromEnrollmentForCourse(StudentId studentId, CourseId courseId) {
         log.info("Resigning from enrollment fpr course {} by student {}", courseId, studentId);
-        studentInventory.removeFromCourse(studentId, courseId);
+        studentEnrollments.resign(studentId, courseId);
     }
 }

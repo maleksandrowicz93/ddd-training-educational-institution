@@ -16,14 +16,14 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class InventoryFacade {
 
-    private final static Function<InventoryEntryCreation, InventoryEntry> CREATION_TO_ENTRY =
-            new InventoryEntryCreationToInventoryEntry();
-
     Inventory inventory;
 
     public void createInventoryEntry(InventoryEntryCreation inventoryEntryCreation) {
         log.info("Creating inventory entry {}...", inventoryEntryCreation);
-        var inventoryEntry = CREATION_TO_ENTRY.apply(inventoryEntryCreation);
+        var inventoryEntry = new InventoryEntry(
+                inventoryEntryCreation.inventoryTypeId(),
+                inventoryEntryCreation.capacity()
+        );
         inventory.save(inventoryEntry);
     }
 

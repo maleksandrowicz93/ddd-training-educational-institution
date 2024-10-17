@@ -11,13 +11,13 @@ import static com.github.maleksandrowicz93.edu.domain.educationalInstitution.inv
 
 enum OpenCourses implements Function<FacultyId, InventoryType> {
 
-    FACTORY;
-
-    @Override
-    public InventoryType apply(FacultyId facultyId) {
-        return new InventoryType(
-                new Unit(facultyId, FACULTY),
-                COURSE
-        );
+    FACTORY {
+        @Override
+        public InventoryType apply(FacultyId facultyId) {
+            return new InventoryType(
+                    new Unit(facultyId, FACULTY),
+                    COURSE
+            );
+        }
     }
 }

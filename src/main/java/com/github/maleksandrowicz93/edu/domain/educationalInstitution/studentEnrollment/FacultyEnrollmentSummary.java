@@ -17,7 +17,7 @@ public record FacultyEnrollmentSummary(
             EducationalInstitutionInventoryEntrySummary<StudentId> inventoryEntrySummary
     ) {
         return new FacultyEnrollmentSummary(
-                new FacultyId(inventoryEntrySummary.inventoryType().unit().id().value()),
+                inventoryEntrySummary.unitId(FacultyId::new),
                 new Vacancies(inventoryEntrySummary.capacity().value()),
                 inventoryEntrySummary.items()
         );

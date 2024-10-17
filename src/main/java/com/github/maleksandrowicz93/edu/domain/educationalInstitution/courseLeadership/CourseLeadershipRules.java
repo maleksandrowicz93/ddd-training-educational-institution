@@ -5,16 +5,16 @@ import com.github.maleksandrowicz93.edu.common.rule.RuleFactory;
 import com.github.maleksandrowicz93.edu.common.rule.Rules;
 import com.github.maleksandrowicz93.edu.common.rule.RulesFactory;
 
-enum CourseLeadershipRulesFactory implements RulesFactory<CourseTakingContext> {
+enum CourseLeadershipRules implements RulesFactory<CourseTakingContext> {
 
-    INSTANCE;
-
-    @Override
-    public Rules<CourseTakingContext> createRules() {
-        return Rules.<CourseTakingContext>from()
-                    .theRule(new FieldsOfStudiesMatched())
-                    .compose();
-    }
+    FACTORY {
+        @Override
+        public Rules<CourseTakingContext> createRules() {
+            return Rules.<CourseTakingContext>from()
+                        .theRule(new FieldsOfStudiesMatched())
+                        .compose();
+        }
+    };
 
     private static class FieldsOfStudiesMatched implements RuleFactory<CourseTakingContext> {
 

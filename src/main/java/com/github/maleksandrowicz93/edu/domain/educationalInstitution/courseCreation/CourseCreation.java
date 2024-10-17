@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipCreationApplication;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.TakenCourseCreationApplication;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
@@ -17,12 +17,12 @@ import static lombok.AccessLevel.PRIVATE;
 @Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-class CourseCreationService {
+class CourseCreation {
 
     EducationalInstitutionInventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
 
-    Optional<CourseCatalogEntry> createCourse(CourseCreationApplication application) {
+    Optional<CourseCatalogEntry> createByProfessor(CourseCreationByProfessorApplication application) {
         var facultyId = application.facultyId();
         var coursesAtFaculty = OpenCourses.FACTORY.apply(facultyId);
         var createdItem = inventoryFacade.addItemToInventoryOfType(coursesAtFaculty, CourseId::new);
@@ -32,11 +32,11 @@ class CourseCreationService {
         }
         var courseId = createdItem.get();
         var course = new CourseCatalogEntry(courseId, application.courseName(), application.fieldsOfStudies());
-        var courseLeadershipCreationApplication = new CourseLeadershipCreationApplication(
+        var courseLeadershipCreationApplication = new TakenCourseCreationApplication(
                 application.professorId(),
                 course
         );
-        var leadershipTaken = courseLeadershipFacade.createCourseLeadership(courseLeadershipCreationApplication);
+        var leadershipTaken = courseLeadershipFacade.createTakenCourse(courseLeadershipCreationApplication);
         if (leadershipTaken) {
             return Optional.of(course);
         }
@@ -45,7 +45,7 @@ class CourseCreationService {
         return Optional.empty();
     }
 
-    void closeCourse(CourseId courseId, FacultyId facultyId) {
+    void close(CourseId courseId, FacultyId facultyId) {
         courseLeadershipFacade.closeCourse(courseId);
         var openCourses = OpenCourses.FACTORY.apply(facultyId);
         inventoryFacade.removeItem(courseId, openCourses);

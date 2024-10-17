@@ -21,7 +21,7 @@ public record CourseEnrollmentSummary(
             EducationalInstitutionInventoryEntrySummary<StudentId> inventoryEntrySummary
     ) {
         return new CourseEnrollmentSummary(
-                new CourseId(inventoryEntrySummary.inventoryType().unit().id().value()),
+                inventoryEntrySummary.unitId(CourseId::new),
                 new Vacancies(inventoryEntrySummary.capacity().value()),
                 inventoryEntrySummary.items()
         );

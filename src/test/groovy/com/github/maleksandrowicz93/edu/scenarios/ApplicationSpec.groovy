@@ -4,7 +4,7 @@ import com.github.maleksandrowicz93.edu.application.ApplicationConfig
 import com.github.maleksandrowicz93.edu.application.QueriesFacade
 import com.github.maleksandrowicz93.edu.application.UseCasesFacade
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseClosingConfig
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationApplication
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationByProfessorApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation.CourseCreationConfig
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseOvertakingApplication
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationApplication
@@ -148,14 +148,14 @@ class ApplicationSpec extends Specification {
             }
 
         when: "musk applies for java course creation"
-            def javaCourseCreationApplication = new CourseCreationApplication(
+            def javaCourseCreationApplication = new CourseCreationByProfessorApplication(
                     itFaculty,
                     musk,
                     "java",
                     new FieldsOfStudies(Set.of(PROGRAMMING)),
                     new Vacancies(3)
             )
-            def javaCourse = useCases.createCourse(javaCourseCreationApplication)
+            def javaCourse = useCases.createCourseByProfessor(javaCourseCreationApplication)
                                      .orElseThrow()
         then: "java course is created by musk"
             with(courseCatalog.getById(javaCourse)) {
@@ -198,7 +198,7 @@ class ApplicationSpec extends Specification {
             }
 
         when: "mati resigns from java course enrollment"
-            useCases.resignFromCourseEnrollment(mati, javaCourse)
+            useCases.resignFromEnrollmentForCourse(mati, javaCourse)
         then: "resignation is accepted"
             with(queries.studentsEnrolledFor(javaCourse)) {
                 count() == 0
@@ -242,7 +242,7 @@ class ApplicationSpec extends Specification {
             }
 
         when: "zuck resign from employment"
-            useCases.receiveEmploymentResignation(zuck, itFaculty)
+            useCases.resignFromEmployment(zuck, itFaculty)
         then: "resignation is accepted"
             professorCatalog.findById(zuck)
                             .isEmpty()
@@ -307,13 +307,13 @@ class ApplicationSpec extends Specification {
                    .isEmpty()
 
         when: "gates applies for spring course creation"
-            def springCourseCreationApplication = new CourseCreationApplication(
+            def springCourseCreationApplication = new CourseCreationByProfessorApplication(
                     itFaculty,
                     gates,
                     "spring",
                     new FieldsOfStudies(Set.of(PROGRAMMING))
             )
-            def springCourse = useCases.createCourse(springCourseCreationApplication)
+            def springCourse = useCases.createCourseByProfessor(springCourseCreationApplication)
                                        .orElseThrow()
         then: "spring course is created by gates"
             with(courseCatalog.getById(springCourse)) {
@@ -386,7 +386,7 @@ class ApplicationSpec extends Specification {
             }
 
         when: "mati resigns from enrollment at faculty"
-            useCases.resignFromFacultyEnrollment(mati, itFaculty)
+            useCases.resignFromEnrollmentAtFaculty(mati, itFaculty)
         then: "resignation is accepted"
             with(queries.studentsEnrolledAt(itFaculty)) {
                 hasVacancy()

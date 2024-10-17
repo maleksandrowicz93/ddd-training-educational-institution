@@ -28,23 +28,24 @@ public class CourseCreationFactory {
 
     public CourseCreationFacade courseCreationFacade() {
         return new CourseCreationFacade(
+                RestrictingCourseVacationsRulesFactory.from(courseCreationConfig).createRules(),
                 CourseClosingRulesFactory.from(courseClosingConfig).createRules(),
                 courseCatalog,
-                courseCreationService(),
-                courseEnrollmentService(),
-                studentEnrollmentReadModel
+                studentEnrollmentReadModel,
+                courseCreation(),
+                courseEnrollments()
         );
     }
 
-    CourseCreationService courseCreationService() {
-        return new CourseCreationService(
+    CourseCreation courseCreation() {
+        return new CourseCreation(
                 inventoryFacade,
                 courseLeadershipFacade
         );
     }
 
-    CourseEnrollmentService courseEnrollmentService() {
-        return new CourseEnrollmentService(
+    CourseEnrollments courseEnrollments() {
+        return new CourseEnrollments(
                 courseCreationConfig,
                 inventoryFacade
         );

@@ -17,38 +17,38 @@ import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-class StudentInventory {
+class StudentEnrollments {
 
     EducationalInstitutionInventoryReadModel inventoryReadModel;
     EducationalInstitutionInventoryFacade inventoryFacade;
 
-    Optional<StudentId> addToFaculty(FacultyId facultyId) {
+    Optional<StudentId> enrollNewOneAt(FacultyId facultyId) {
         var studentEnrollmentAtFaculty = StudentsEnrolledForFaculty.FACTORY.apply(facultyId);
         return inventoryFacade.addItemToInventoryOfType(studentEnrollmentAtFaculty, StudentId::new);
     }
 
-    public void removeFromFaculty(StudentId studentId, FacultyId facultyId) {
-        resignFromAllCoursesEnrollments(studentId);
+    void resign(StudentId studentId, FacultyId facultyId) {
+        resignFromAllEnrollmentsForCourse(studentId);
         var studentEnrollmentAtFaculty = StudentsEnrolledForFaculty.FACTORY.apply(facultyId);
         inventoryFacade.removeItem(studentId, studentEnrollmentAtFaculty);
     }
 
-    boolean addToCourse(StudentId studentId, CourseId courseId) {
+    boolean enrollForCourse(StudentId studentId, CourseId courseId) {
         var studentEnrollmentForCourse = StudentsEnrolledForCourse.FACTORY.apply(courseId);
         return inventoryFacade.addItemToInventoryOfType(studentEnrollmentForCourse, studentId);
     }
 
-    public void removeFromCourse(StudentId studentId, CourseId courseId) {
+    void resign(StudentId studentId, CourseId courseId) {
         var studentEnrollmentForCourse = StudentsEnrolledForCourse.FACTORY.apply(courseId);
         inventoryFacade.removeItem(studentId, studentEnrollmentForCourse);
     }
 
-    private void resignFromAllCoursesEnrollments(StudentId studentId) {
+    private void resignFromAllEnrollmentsForCourse(StudentId studentId) {
         inventoryReadModel.findAllUnitsBy(
                                   COURSE,
                                   new Item(studentId, STUDENT),
                                   CourseId::new
                           )
-                          .forEach(courseId -> removeFromCourse(studentId, courseId));
+                          .forEach(courseId -> resign(studentId, courseId));
     }
 }

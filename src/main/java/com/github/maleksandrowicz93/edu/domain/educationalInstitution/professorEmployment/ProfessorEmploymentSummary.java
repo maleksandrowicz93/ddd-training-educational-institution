@@ -17,7 +17,7 @@ public record ProfessorEmploymentSummary(
             EducationalInstitutionInventoryEntrySummary<ProfessorId> inventoryEntrySummary
     ) {
         return new ProfessorEmploymentSummary(
-                new FacultyId(inventoryEntrySummary.inventoryType().unit().id().value()),
+                inventoryEntrySummary.unitId(FacultyId::new),
                 new Vacancies(inventoryEntrySummary.capacity().value()),
                 inventoryEntrySummary.items()
         );

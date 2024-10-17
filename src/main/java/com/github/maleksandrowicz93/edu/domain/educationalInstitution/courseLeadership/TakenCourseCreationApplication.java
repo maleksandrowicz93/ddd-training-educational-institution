@@ -3,7 +3,7 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLea
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 
-public record CourseLeadershipCreationApplication(
+public record TakenCourseCreationApplication(
         ProfessorId professorId,
         CourseCatalogEntry course
 ) {
