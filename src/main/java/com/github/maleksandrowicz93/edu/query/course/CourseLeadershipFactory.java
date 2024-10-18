@@ -7,13 +7,13 @@ import java.util.function.Function;
 
 enum CourseLeadershipFactory implements Function<Optional<ProfessorCatalogEntry>, CourseLeadership> {
 
-    INSTANCE;
-
-    @Override
-    public CourseLeadership apply(Optional<ProfessorCatalogEntry> maybeProfessor) {
-        return maybeProfessor
-                .map(Professor::from)
-                .map(CourseLeadership::takenBy)
-                .orElse(CourseLeadership.FREE);
+    INSTANCE {
+        @Override
+        public CourseLeadership apply(Optional<ProfessorCatalogEntry> maybeProfessor) {
+            return maybeProfessor
+                    .map(Professor::from)
+                    .map(CourseLeadership::takenBy)
+                    .orElse(CourseLeadership.FREE);
+        }
     }
 }

@@ -6,12 +6,12 @@ import java.util.function.Function;
 
 enum CourseSummaryInitializer implements Function<CourseId, CourseSummary> {
 
-    INSTANCE;
-
-    @Override
-    public CourseSummary apply(CourseId courseId) {
-        return CourseSummary.builder()
-                            .courseId(courseId)
-                            .build();
+    INSTANCE {
+        @Override
+        public CourseSummary apply(CourseId courseId) {
+            return CourseSummary.builder()
+                                .courseId(courseId)
+                                .build();
+        }
     }
 }

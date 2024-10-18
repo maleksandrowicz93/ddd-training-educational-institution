@@ -4,17 +4,17 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorE
 
 enum AddProfessorEmployment implements FacultySummaryComposer<ProfessorEmploymentSummary> {
 
-    COMPOSER;
-
-    @Override
-    public FacultySummary apply(FacultySummary facultySummary, ProfessorEmploymentSummary employmentSummary) {
-        return facultySummary.toBuilder()
-                             .employedProfessors(
-                                     new EmployedProfessors(
-                                             employmentSummary.maxVacancies(),
-                                             employmentSummary.employed()
-                                     )
-                             )
-                             .build();
+    COMPOSER {
+        @Override
+        public FacultySummary apply(FacultySummary facultySummary, ProfessorEmploymentSummary employmentSummary) {
+            return facultySummary.toBuilder()
+                                 .employedProfessors(
+                                         new EmployedProfessors(
+                                                 employmentSummary.maxVacancies(),
+                                                 employmentSummary.employed()
+                                         )
+                                 )
+                                 .build();
+        }
     }
 }

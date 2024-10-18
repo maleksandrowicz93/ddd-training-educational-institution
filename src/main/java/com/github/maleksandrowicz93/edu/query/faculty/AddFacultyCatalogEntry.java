@@ -4,14 +4,14 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCat
 
 enum AddFacultyCatalogEntry implements FacultySummaryComposer<FacultyCatalogEntry> {
 
-    COMPOSER;
-
-    @Override
-    public FacultySummary apply(FacultySummary facultySummary, FacultyCatalogEntry catalogEntry) {
-        return facultySummary.toBuilder()
-                             .facultyName(catalogEntry.name())
-                             .mainFieldOfStudy(catalogEntry.mainFieldOfStudy())
-                             .secondaryFieldsOfStudies(catalogEntry.secondaryFieldOfStudies())
-                             .build();
+    COMPOSER {
+        @Override
+        public FacultySummary apply(FacultySummary facultySummary, FacultyCatalogEntry catalogEntry) {
+            return facultySummary.toBuilder()
+                                 .facultyName(catalogEntry.name())
+                                 .mainFieldOfStudy(catalogEntry.mainFieldOfStudy())
+                                 .secondaryFieldsOfStudies(catalogEntry.secondaryFieldOfStudies())
+                                 .build();
+        }
     }
 }

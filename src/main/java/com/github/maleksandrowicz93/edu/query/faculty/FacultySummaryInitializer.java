@@ -6,12 +6,12 @@ import java.util.function.Function;
 
 enum FacultySummaryInitializer implements Function<FacultyId, FacultySummary> {
 
-    INSTANCE;
-
-    @Override
-    public FacultySummary apply(FacultyId facultyId) {
-        return FacultySummary.builder()
-                             .facultyId(facultyId)
-                             .build();
+    INSTANCE {
+        @Override
+        public FacultySummary apply(FacultyId facultyId) {
+            return FacultySummary.builder()
+                                 .facultyId(facultyId)
+                                 .build();
+        }
     }
 }

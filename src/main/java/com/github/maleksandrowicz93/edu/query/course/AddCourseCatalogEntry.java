@@ -4,13 +4,13 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCata
 
 enum AddCourseCatalogEntry implements CourseSummaryComposer<CourseCatalogEntry> {
 
-    COMPOSER;
-
-    @Override
-    public CourseSummary apply(CourseSummary courseSummary, CourseCatalogEntry catalogEntry) {
-        return courseSummary.toBuilder()
-                            .courseName(catalogEntry.name())
-                            .fieldsOfStudies(catalogEntry.fieldsOfStudies())
-                            .build();
+    COMPOSER {
+        @Override
+        public CourseSummary apply(CourseSummary courseSummary, CourseCatalogEntry catalogEntry) {
+            return courseSummary.toBuilder()
+                                .courseName(catalogEntry.name())
+                                .fieldsOfStudies(catalogEntry.fieldsOfStudies())
+                                .build();
+        }
     }
 }

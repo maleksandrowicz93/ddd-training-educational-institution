@@ -11,29 +11,31 @@ enum CourseLeadershipRules implements RulesFactory<CourseTakingContext> {
         @Override
         public Rules<CourseTakingContext> createRules() {
             return Rules.<CourseTakingContext>from()
-                        .theRule(new FieldsOfStudiesMatched())
+                        .theRule(FieldsOfStudiesMatched.RULE)
                         .compose();
         }
-    };
 
-    private static class FieldsOfStudiesMatched implements RuleFactory<CourseTakingContext> {
+        private enum FieldsOfStudiesMatched implements RuleFactory<CourseTakingContext> {
 
-        @Override
-        public Rule<CourseTakingContext> get() {
-            return new Rule<>(
-                    context -> {
-                        var professorFieldsOfStudies = context.professor().fieldsOfStudies();
-                        var courseFieldsOfStudies = context.course().fieldsOfStudies();
-                        return professorFieldsOfStudies.matchesAllOf(courseFieldsOfStudies);
-                    },
-                    context -> {
-                        var professor = context.professor();
-                        var course = context.course();
-                        return ("Professor %s with id %s cannot take course %s with id %s " +
-                                "because fields of studies are not matched")
-                                .formatted(professor.name(), professor.id(), course.name(), course.id());
-                    }
-            );
+            RULE {
+                @Override
+                public Rule<CourseTakingContext> get() {
+                    return new Rule<>(
+                            context -> {
+                                var professorFieldsOfStudies = context.professor().fieldsOfStudies();
+                                var courseFieldsOfStudies = context.course().fieldsOfStudies();
+                                return professorFieldsOfStudies.matchesAllOf(courseFieldsOfStudies);
+                            },
+                            context -> {
+                                var professor = context.professor();
+                                var course = context.course();
+                                return ("Professor %s with id %s cannot take course %s with id %s " +
+                                        "because fields of studies are not matched")
+                                        .formatted(professor.name(), professor.id(), course.name(), course.id());
+                            }
+                    );
+                }
+            }
         }
     }
 }
