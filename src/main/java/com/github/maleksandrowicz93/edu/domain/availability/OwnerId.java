@@ -5,4 +5,8 @@ import java.util.UUID;
 public record OwnerId(
         UUID value
 ) {
+
+    public static OwnerId newOne() {
+        return new OwnerId(UUID.randomUUID());
+    }
 }

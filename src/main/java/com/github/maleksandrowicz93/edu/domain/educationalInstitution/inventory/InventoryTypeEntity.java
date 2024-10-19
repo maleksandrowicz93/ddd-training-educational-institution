@@ -2,7 +2,6 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory
 
 import com.github.maleksandrowicz93.edu.common.infra.Entity;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.EducationalInstitutionId;
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryTypeId;
 
 record InventoryTypeEntity(
         InventoryTypeId id,

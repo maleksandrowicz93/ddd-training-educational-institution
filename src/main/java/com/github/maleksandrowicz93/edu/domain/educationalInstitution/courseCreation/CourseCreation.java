@@ -4,7 +4,7 @@ import com.github.maleksandrowicz93.edu.common.infra.Transactional;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.TakenCourseCreationApplication;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 class CourseCreation {
 
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
 
     @Transactional

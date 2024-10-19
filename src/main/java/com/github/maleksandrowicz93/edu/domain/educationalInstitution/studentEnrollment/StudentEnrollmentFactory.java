@@ -2,8 +2,8 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEn
 
 import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -15,8 +15,8 @@ public class StudentEnrollmentFactory {
 
     StudentEnrollmentAtFacultyConfig config;
     FacultyCatalog facultyCatalog;
-    EducationalInstitutionInventoryReadModel inventoryReadModel;
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryReadModel inventoryReadModel;
+    InventoryFacade inventoryFacade;
     NotificationPublisher notificationPublisher;
 
     public StudentEnrollmentReadModel studentEnrollmentReadModel() {

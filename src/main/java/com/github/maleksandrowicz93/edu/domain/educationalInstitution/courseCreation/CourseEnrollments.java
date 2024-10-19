@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryType;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryTypeCreation;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.Unit;
@@ -23,7 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 class CourseEnrollments {
 
     CourseCreationConfig config;
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryFacade inventoryFacade;
 
     void openFor(CourseId courseId, Vacancies vacancies) {
         inventoryFacade.createInventoryOfType(

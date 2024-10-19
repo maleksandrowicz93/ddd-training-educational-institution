@@ -27,18 +27,6 @@ public class ArchitectureDependencyTest {
     }
 
     @Test
-    void checkDomainDependencies() {
-        layeredArchitecture().consideringOnlyDependenciesInLayers()
-                             .layer("availability").definedBy("com.github.maleksandrowicz93.edu.domain.availability..")
-                             .layer("educationalInstitution").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution..")
-                             .layer("inventory").definedBy("com.github.maleksandrowicz93.edu.domain.inventory..")
-                             .whereLayer("availability").mayNotAccessAnyLayer()
-                             .whereLayer("inventory").mayNotAccessAnyLayer()
-                             .whereLayer("educationalInstitution").mayOnlyAccessLayers("availability", "inventory")
-                             .check(classes);
-    }
-
-    @Test
     void checkEducationalInstitutionDependencies() {
         layeredArchitecture().consideringOnlyDependenciesInLayers()
                              .layer("courseCatalog").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog..")
@@ -68,19 +56,17 @@ public class ArchitectureDependencyTest {
     void checkSubdomainsDependencies() {
         layeredArchitecture().consideringOnlyDependenciesInLayers()
                              .layer("availability").definedBy("com.github.maleksandrowicz93.edu.domain.availability..")
-                             .layer("inventory").definedBy("com.github.maleksandrowicz93.edu.domain.inventory..")
                              .layer("courseCatalog").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog..")
                              .layer("courseCreation").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation..")
                              .layer("courseLeadership").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership..")
                              .layer("facultyCatalog").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog..")
                              .layer("facultyCreation").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation..")
-                             .layer("educationalInstitutionInventory").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory..")
+                             .layer("inventory").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory..")
                              .layer("professorCatalog").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog..")
                              .layer("professorEmployment").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment..")
                              .layer("shared").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared..")
                              .layer("studentEnrollment").definedBy("com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment..")
-                             .whereLayer("availability").mayOnlyBeAccessedByLayers("courseLeadership")
-                             .whereLayer("inventory").mayOnlyBeAccessedByLayers("educationalInstitutionInventory")
+                             .whereLayer("availability").mayOnlyBeAccessedByLayers("courseLeadership", "inventory")
                              .check(classes);
     }
 }

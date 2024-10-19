@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryEntrySummary;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryEntrySummary;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.StudentId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Vacancies;
@@ -18,7 +18,7 @@ public record CourseEnrollmentSummary(
     }
 
     static CourseEnrollmentSummary from(
-            EducationalInstitutionInventoryEntrySummary<StudentId> inventoryEntrySummary
+            InventoryEntrySummary<StudentId> inventoryEntrySummary
     ) {
         return new CourseEnrollmentSummary(
                 inventoryEntrySummary.unitId(CourseId::new),

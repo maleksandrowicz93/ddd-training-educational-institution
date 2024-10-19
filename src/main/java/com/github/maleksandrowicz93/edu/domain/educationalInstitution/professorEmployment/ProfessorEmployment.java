@@ -2,7 +2,7 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professor
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryType;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryTypeCreation;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.Unit;
@@ -22,7 +22,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 class ProfessorEmployment {
 
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryFacade inventoryFacade;
 
     @Transactional
     Optional<ProfessorId> employNewAt(FacultyId facultyId, Capacity professorCapacity) {

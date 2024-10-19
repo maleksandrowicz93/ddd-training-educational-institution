@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryEntrySummary;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryEntrySummary;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.Vacancies;
@@ -14,7 +14,7 @@ public record ProfessorEmploymentSummary(
 ) {
 
     static ProfessorEmploymentSummary from(
-            EducationalInstitutionInventoryEntrySummary<ProfessorId> inventoryEntrySummary
+            InventoryEntrySummary<ProfessorId> inventoryEntrySummary
     ) {
         return new ProfessorEmploymentSummary(
                 inventoryEntrySummary.unitId(FacultyId::new),

@@ -17,15 +17,24 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
 
     @Getter
     final AvailabilityUnitId id;
+    final ResourceId parentId;
     final ResourceId resourceId;
     Blockade blockade;
 
-    private AvailabilityUnit(ResourceId resourceId, OwnerId ownerId) {
-        this(AvailabilityUnitId.newOne(), resourceId, Blockade.by(ownerId));
+    private AvailabilityUnit(ResourceId resourceId, Blockade blockade) {
+        this(AvailabilityUnitId.newOne(), null, resourceId, blockade);
     }
 
-    static AvailabilityUnit blocked(ResourceId resourceId, OwnerId blockedBy) {
-        return new AvailabilityUnit(resourceId, blockedBy);
+    private AvailabilityUnit(ResourceId parentId, ResourceId resourceId, Blockade blockade) {
+        this(AvailabilityUnitId.newOne(), parentId, resourceId, blockade);
+    }
+
+    static AvailabilityUnit forParent(ResourceId parentId, ResourceId resourceId) {
+        return new AvailabilityUnit(parentId, resourceId, Blockade.NONE);
+    }
+
+    static AvailabilityUnit blocked(ResourceId resourceId, OwnerId ownerId) {
+        return new AvailabilityUnit(resourceId, Blockade.by(ownerId));
     }
 
     boolean block(OwnerId ownerId) {
@@ -48,6 +57,22 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
         }
         blockade = Blockade.NONE;
         return true;
+    }
+
+    boolean isFree() {
+        return blockade.byNone();
+    }
+
+    boolean isBlocked() {
+        return !isFree();
+    }
+
+    boolean isBlockedBy(OwnerId ownerId) {
+        return blockade.blockedBy(ownerId);
+    }
+
+    ResourceId parentId() {
+        return parentId;
     }
 
     ResourceId resourceId() {

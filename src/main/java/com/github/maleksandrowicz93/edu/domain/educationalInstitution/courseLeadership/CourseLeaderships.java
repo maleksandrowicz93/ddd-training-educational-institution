@@ -1,8 +1,8 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership;
 
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,8 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 class CourseLeaderships {
 
-    EducationalInstitutionInventoryReadModel inventoryReadModel;
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryReadModel inventoryReadModel;
+    InventoryFacade inventoryFacade;
     CourseAvailabilityReadModel courseAvailabilityReadModel;
     CourseAvailabilityFacade courseAvailabilityFacade;
 

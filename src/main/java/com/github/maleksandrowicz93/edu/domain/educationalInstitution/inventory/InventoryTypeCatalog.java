@@ -1,7 +1,5 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory;
 
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryTypeId;
-
 import java.util.Collection;
 import java.util.Optional;
 

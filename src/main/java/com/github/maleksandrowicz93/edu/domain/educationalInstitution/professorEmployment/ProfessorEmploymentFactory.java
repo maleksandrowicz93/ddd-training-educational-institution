@@ -3,8 +3,8 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professor
 import com.github.maleksandrowicz93.edu.common.infra.NotificationPublisher;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLeadership.CourseLeadershipFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog.ProfessorCatalog;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,8 +18,8 @@ public class ProfessorEmploymentFactory {
     ProfessorEmploymentConfig professorEmploymentConfig;
     FacultyCatalog facultyCatalog;
     ProfessorCatalog professorCatalog;
-    EducationalInstitutionInventoryReadModel inventoryReadModel;
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryReadModel inventoryReadModel;
+    InventoryFacade inventoryFacade;
     CourseLeadershipFacade courseLeadershipFacade;
     NotificationPublisher notificationPublisher;
 

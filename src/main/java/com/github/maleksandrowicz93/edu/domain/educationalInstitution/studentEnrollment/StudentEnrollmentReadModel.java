@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.studentEnrollment;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.StudentId;
@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class StudentEnrollmentReadModel {
 
-    EducationalInstitutionInventoryReadModel inventoryReadModel;
+    InventoryReadModel inventoryReadModel;
 
     public Optional<FacultyEnrollmentSummary> findEnrollmentSummaryAt(FacultyId facultyId) {
         return inventoryReadModel.findSummaryByInventoryType(

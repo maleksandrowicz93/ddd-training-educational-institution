@@ -5,7 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.IntStream;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -23,9 +29,56 @@ public class AvailabilityFacade {
         availabilityRepo.save(availabilityUnit);
     }
 
+    public void createAvailabilityUnitsForParent(ResourceId parentId, int unitsNumber) {
+        log.info("Creating {} availability units for parent {}...", unitsNumber, parentId);
+        availabilityRepo.saveAll(
+                IntStream.rangeClosed(1, unitsNumber)
+                         .mapToObj(_ -> AvailabilityUnit.forParent(parentId, ResourceId.newOne()))
+                         .toList()
+        );
+    }
+
     public void deleteAvailabilityUnitByResourceId(ResourceId resourceId) {
-        log.info("Deleting availability unit for resource {}", resourceId);
+        log.info("Deleting availability unit for resource {}...", resourceId);
         availabilityRepo.deleteByResourceId(resourceId);
+    }
+
+    public void deleteAllAvailabilityUnitsForParent(ResourceId parentId) {
+        log.info("Deleting all availability units for parent {}...", parentId);
+        availabilityRepo.deleteAllByParentId(parentId);
+    }
+
+    public void deleteRandomAvailabilityUnitsForParent(ResourceId parentId, int howManyUnitsDelete) {
+        log.info("Deleting {} random free availability units for resource {}...", howManyUnitsDelete, parentId);
+        var unitsToBeDeleted = availabilityRepo.findAllByParentId(parentId)
+                                               .stream()
+                                               .filter(AvailabilityUnit::isFree)
+                                               .limit(howManyUnitsDelete)
+                                               .map(AvailabilityUnit::resourceId)
+                                               .toList();
+        availabilityRepo.deleteAllByResourceIds(unitsToBeDeleted);
+    }
+
+    public boolean blockRandom(Collection<ResourceId> resources, OwnerId ownerId) {
+        log.info("Blocking random resource from {} by owner {}...", resources, ownerId);
+        var resourcesToBlock = new HashSet<>(resources);
+        while (!resourcesToBlock.isEmpty()) {
+            var randomUnit = getRandomUnit(resourcesToBlock);
+            var blocked = randomUnit.block(ownerId);
+            if (blocked) {
+                availabilityRepo.save(randomUnit);
+                return true;
+            }
+            resourcesToBlock.remove(randomUnit.resourceId());
+        }
+        log.info("Owner {} cannot take any of resources {}", ownerId, resources);
+        return false;
+    }
+
+    private AvailabilityUnit getRandomUnit(Set<ResourceId> resources) {
+        var availabilityUnits = new ArrayList<>(availabilityRepo.findAllByIds(resources));
+        Collections.shuffle(availabilityUnits);
+        return availabilityUnits.getFirst();
     }
 
     @Transactional

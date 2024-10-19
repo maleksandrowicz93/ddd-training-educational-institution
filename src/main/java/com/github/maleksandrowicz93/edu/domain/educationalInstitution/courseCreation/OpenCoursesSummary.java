@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCreation;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryEntrySummary;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryEntrySummary;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 
@@ -14,7 +14,7 @@ public record OpenCoursesSummary(
 ) {
 
     static OpenCoursesSummary from(
-            EducationalInstitutionInventoryEntrySummary<CourseId> inventoryEntrySummary
+            InventoryEntrySummary<CourseId> inventoryEntrySummary
     ) {
         return new OpenCoursesSummary(
                 inventoryEntrySummary.unitId(FacultyId::new),

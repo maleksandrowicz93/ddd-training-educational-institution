@@ -2,7 +2,7 @@ package com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCr
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 class FacultyServices {
 
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryFacade inventoryFacade;
 
     @Transactional
     void open(FacultyServicesSpecification specification) {

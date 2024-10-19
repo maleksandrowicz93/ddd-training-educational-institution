@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation;
 
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
@@ -13,7 +13,7 @@ public class FacultyCreationFactory {
 
     FacultyCreationConfig facultyCreationConfig;
     FacultyCatalog facultyCatalog;
-    EducationalInstitutionInventoryFacade inventoryFacade;
+    InventoryFacade inventoryFacade;
 
     public FacultyCreationFacade facultyCreationFacade() {
         return new FacultyCreationFacade(

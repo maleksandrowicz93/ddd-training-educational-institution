@@ -2,6 +2,7 @@ package com.github.maleksandrowicz93.edu.common.infra;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -45,7 +46,7 @@ public abstract class InMemoryAbstractRepo<ID, E extends Entity<ID>> {
         return Optional.ofNullable(repo.get(id));
     }
 
-    public Collection<E> findAllBy(Predicate<E> predicate) {
+    public List<E> findAllBy(Predicate<E> predicate) {
         return repo.values()
                    .stream()
                    .filter(predicate)

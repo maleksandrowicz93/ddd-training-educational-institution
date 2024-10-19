@@ -48,7 +48,8 @@ public class ProfessorEmploymentFacade {
         maybeEmployed.ifPresentOrElse(
                 professorId -> professorCatalog.save(
                         new ProfessorCatalogEntry(
-                                professorId, application.professorName(),
+                                professorId,
+                                application.professorName(),
                                 application.fieldsOfStudies()
                         )
                 ),

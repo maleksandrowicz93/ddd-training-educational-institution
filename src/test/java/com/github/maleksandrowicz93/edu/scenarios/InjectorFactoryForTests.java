@@ -12,17 +12,14 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCata
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseCatalog.CourseCatalogEntry;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalogEntry;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFactory;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFactory;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog.ProfessorCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog.ProfessorCatalogEntry;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.CourseId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryFactory;
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryReadModel;
 import lombok.experimental.FieldDefaults;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -33,7 +30,6 @@ public class InjectorFactoryForTests {
     ApplicationConfig applicationConfig;
     AvailabilityFactory availabilityFactory;
     InventoryFactory inventoryFactory;
-    EducationalInstitutionInventoryFactory educationalInstitutionInventoryFactory;
     NotificationPublisher notificationPublisher;
 
     public InjectorFactoryForTests(
@@ -42,10 +38,9 @@ public class InjectorFactoryForTests {
     ) {
         this.applicationConfig = applicationConfig;
         availabilityFactory = AvailabilityFactory.forTests();
-        inventoryFactory = InventoryFactory.forTests();
-        educationalInstitutionInventoryFactory = EducationalInstitutionInventoryFactory.forTests(
-                inventoryReadModel(),
-                inventoryFacade()
+        inventoryFactory = InventoryFactory.forTests(
+                availabilityReadModel(),
+                availabilityFacade()
         );
         this.notificationPublisher = notificationPublisher;
     }
@@ -58,8 +53,8 @@ public class InjectorFactoryForTests {
                 courseCatalog(),
                 availabilityFacade(),
                 availabilityReadModel(),
-                educationalInstitutionInventoryReadModel(),
-                educationalInstitutionInventoryFacade(),
+                inventoryReadModel(),
+                inventoryFacade(),
                 notificationPublisher
         );
     }
@@ -88,10 +83,6 @@ public class InjectorFactoryForTests {
         return inventoryFactory.inventoryReadModel();
     }
 
-    EducationalInstitutionInventoryReadModel educationalInstitutionInventoryReadModel() {
-        return educationalInstitutionInventoryFactory.educationalInstitutionInventoryReadModel();
-    }
-
     //facades
 
     AvailabilityFacade availabilityFacade() {
@@ -100,10 +91,6 @@ public class InjectorFactoryForTests {
 
     InventoryFacade inventoryFacade() {
         return inventoryFactory.inventoryFacade();
-    }
-
-    EducationalInstitutionInventoryFacade educationalInstitutionInventoryFacade() {
-        return educationalInstitutionInventoryFactory.educationalInstitutionInventoryFacade();
     }
 
     //in memory catalogs implementations

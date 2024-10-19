@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment;
 
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.FacultyId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.ProfessorId;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class ProfessorEmploymentReadModel {
 
-    EducationalInstitutionInventoryReadModel inventoryReadModel;
+    InventoryReadModel inventoryReadModel;
 
     public Optional<ProfessorEmploymentSummary> findEmploymentSummaryAt(FacultyId facultyId) {
         return inventoryReadModel.findSummaryByInventoryType(

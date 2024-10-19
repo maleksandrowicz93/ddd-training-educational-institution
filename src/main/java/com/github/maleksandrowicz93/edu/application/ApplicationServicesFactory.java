@@ -14,8 +14,8 @@ import com.github.maleksandrowicz93.edu.domain.educationalInstitution.courseLead
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCatalog.FacultyCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.facultyCreation.FacultyCreationFactory;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryFacade;
-import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.EducationalInstitutionInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryFacade;
+import com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory.InventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorCatalog.ProfessorCatalog;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorEmploymentFacade;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.professorEmployment.ProfessorEmploymentFactory;
@@ -34,8 +34,8 @@ public record ApplicationServicesFactory(
         CourseCatalog courseCatalog,
         AvailabilityFacade availabilityFacade,
         AvailabilityReadModel availabilityReadModel,
-        EducationalInstitutionInventoryReadModel educationalInstitutionInventoryReadModel,
-        EducationalInstitutionInventoryFacade educationalInstitutionInventoryFacade,
+        InventoryReadModel educationalInstitutionInventoryReadModel,
+        InventoryFacade educationalInstitutionInventoryFacade,
         NotificationPublisher notificationPublisher
 ) implements Injector {
 

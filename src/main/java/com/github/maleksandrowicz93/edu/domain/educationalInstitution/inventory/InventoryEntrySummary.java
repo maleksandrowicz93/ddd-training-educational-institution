@@ -1,9 +1,9 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.inventory;
 
 import com.github.maleksandrowicz93.edu.common.capacity.Capacity;
+import com.github.maleksandrowicz93.edu.domain.availability.GroupedAvailabilitySummary;
+import com.github.maleksandrowicz93.edu.domain.availability.OwnerId;
 import com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared.EducationalInstitutionId;
-import com.github.maleksandrowicz93.edu.domain.inventory.InventoryEntrySummary;
-import com.github.maleksandrowicz93.edu.domain.inventory.ItemInstanceId;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 import static java.util.stream.Collectors.toSet;
 
-public record EducationalInstitutionInventoryEntrySummary<T extends EducationalInstitutionId>(
+public record InventoryEntrySummary<T extends EducationalInstitutionId>(
         InventoryType inventoryType,
         Capacity capacity,
         Collection<T> items
@@ -21,26 +21,26 @@ public record EducationalInstitutionInventoryEntrySummary<T extends EducationalI
         return idFactory.apply(inventoryType.unit().id().value());
     }
 
-    static <T extends EducationalInstitutionId> EducationalInstitutionInventoryEntrySummary<T> from(
+    static <T extends EducationalInstitutionId> InventoryEntrySummary<T> from(
             InventoryType inventoryType,
-            InventoryEntrySummary inventoryEntrySummary,
+            GroupedAvailabilitySummary groupedAvailabilitySummary,
             Function<UUID, T> itemIdFactory
     ) {
-        return new EducationalInstitutionInventoryEntrySummary<>(
+        return new InventoryEntrySummary<>(
                 inventoryType,
-                inventoryEntrySummary.capacity(),
-                toItems(inventoryEntrySummary, itemIdFactory)
+                Capacity.of(groupedAvailabilitySummary.unitsNumber()),
+                toItems(groupedAvailabilitySummary, itemIdFactory)
         );
     }
 
     private static <T extends EducationalInstitutionId> Collection<T> toItems(
-            InventoryEntrySummary inventoryEntrySummary,
+            GroupedAvailabilitySummary groupedAvailabilitySummary,
             Function<UUID, T> itemIdFactory
     ) {
-        return inventoryEntrySummary.items()
-                                    .stream()
-                                    .map(ItemInstanceId::value)
-                                    .map(itemIdFactory)
-                                    .collect(toSet());
+        return groupedAvailabilitySummary.owners()
+                                         .stream()
+                                         .map(OwnerId::value)
+                                         .map(itemIdFactory)
+                                         .collect(toSet());
     }
 }
