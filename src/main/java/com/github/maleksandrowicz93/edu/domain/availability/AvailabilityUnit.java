@@ -11,7 +11,7 @@ import java.util.Optional;
 import static lombok.AccessLevel.PRIVATE;
 
 @Accessors(fluent = true)
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 @FieldDefaults(level = PRIVATE)
 class AvailabilityUnit implements Entity<AvailabilityUnitId> {
 
@@ -29,8 +29,8 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
         this(AvailabilityUnitId.newOne(), parentId, resourceId, blockade);
     }
 
-    static AvailabilityUnit forParent(ResourceId parentId, ResourceId resourceId) {
-        return new AvailabilityUnit(parentId, resourceId, Blockade.NONE);
+    static AvailabilityUnit forParent(ResourceId parentId) {
+        return new AvailabilityUnit(parentId, ResourceId.newOne(), Blockade.NONE);
     }
 
     static AvailabilityUnit blocked(ResourceId resourceId, OwnerId ownerId) {

@@ -1,9 +1,10 @@
 package com.github.maleksandrowicz93.edu.domain.availability;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
 import java.util.stream.Collector;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
 
 public record GroupedAvailabilitySummary(
         ResourceId parentId,
@@ -11,17 +12,12 @@ public record GroupedAvailabilitySummary(
         Collection<OwnerId> owners
 ) {
 
-    static Collector<Optional<OwnerId>, HashSet<OwnerId>, GroupedAvailabilitySummary> from(
+    static Collector<OwnerId, Object, GroupedAvailabilitySummary> toGroupedAvailabilitySummary(
             ResourceId parentId,
             int unitsNumber
     ) {
-        return Collector.of(
-                HashSet::new,
-                (owners, maybeOwner) -> maybeOwner.ifPresent(owners::add),
-                (a, b) -> {
-                    a.addAll(b);
-                    return a;
-                },
+        return collectingAndThen(
+                toSet(),
                 owners -> new GroupedAvailabilitySummary(parentId, unitsNumber, owners)
         );
     }

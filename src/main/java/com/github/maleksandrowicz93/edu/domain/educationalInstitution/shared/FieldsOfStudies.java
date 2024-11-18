@@ -1,24 +1,19 @@
 package com.github.maleksandrowicz93.edu.domain.educationalInstitution.shared;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
 public record FieldsOfStudies(
         Collection<FieldOfStudy> all
 ) {
 
-    public static Collector<FieldOfStudy, Collection<FieldOfStudy>, FieldsOfStudies> toFieldsOfStudies() {
-        return Collector.of(
-                HashSet::new,
-                Collection::add,
-                (a, b) -> {
-                    a.addAll(b);
-                    return a;
-                },
+    public static Collector<FieldOfStudy, Object, FieldsOfStudies> toFieldsOfStudies() {
+        return collectingAndThen(
+                toSet(),
                 FieldsOfStudies::new
         );
     }

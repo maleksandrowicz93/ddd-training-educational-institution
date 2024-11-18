@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.IntStream;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -31,11 +31,7 @@ public class AvailabilityFacade {
 
     public void createAvailabilityUnitsForParent(ResourceId parentId, int unitsNumber) {
         log.info("Creating {} availability units for parent {}...", unitsNumber, parentId);
-        availabilityRepo.saveAll(
-                IntStream.rangeClosed(1, unitsNumber)
-                         .mapToObj(_ -> AvailabilityUnit.forParent(parentId, ResourceId.newOne()))
-                         .toList()
-        );
+        availabilityRepo.saveGrouped(GroupedAvailability.of(parentId, unitsNumber));
     }
 
     public void deleteAvailabilityUnitByResourceId(ResourceId resourceId) {
@@ -59,20 +55,28 @@ public class AvailabilityFacade {
         availabilityRepo.deleteAllByResourceIds(unitsToBeDeleted);
     }
 
-    public boolean blockRandom(Collection<ResourceId> resources, OwnerId ownerId) {
-        log.info("Blocking random resource from {} by owner {}...", resources, ownerId);
-        var resourcesToBlock = new HashSet<>(resources);
+    public Optional<ResourceId> blockRandomOf(ResourceId parentId, OwnerId ownerId) {
+        log.info("Blocking random resource of parent {} by owner {}...", parentId, ownerId);
+        var resourcesToBlock = new HashSet<>(findRandomFreeUnitOf(parentId));
         while (!resourcesToBlock.isEmpty()) {
             var randomUnit = getRandomUnit(resourcesToBlock);
             var blocked = randomUnit.block(ownerId);
             if (blocked) {
                 availabilityRepo.save(randomUnit);
-                return true;
+                return Optional.of(randomUnit.resourceId());
             }
             resourcesToBlock.remove(randomUnit.resourceId());
         }
-        log.info("Owner {} cannot take any of resources {}", ownerId, resources);
-        return false;
+        log.info("Owner {} cannot take any of parent {} resources", ownerId, parentId);
+        return Optional.empty();
+    }
+
+    private Collection<ResourceId> findRandomFreeUnitOf(ResourceId parentId) {
+        return availabilityRepo.findAllByParentId(parentId)
+                               .stream()
+                               .filter(AvailabilityUnit::isFree)
+                               .map(AvailabilityUnit::resourceId)
+                               .toList();
     }
 
     private AvailabilityUnit getRandomUnit(Set<ResourceId> resources) {

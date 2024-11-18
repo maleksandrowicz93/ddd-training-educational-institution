@@ -78,10 +78,8 @@ public class InventoryFacade {
         inventoryTypeCatalog.findIdByInventoryType(inventoryType)
                             .ifPresent(inventoryTypeId -> {
                                 var parentId = new ResourceId(inventoryTypeId.value());
-                                var resources = availabilityReadModel.findAllFreeResourcesOfParent(parentId);
-                                itemAddingResult.set(
-                                        availabilityFacade.blockRandom(resources, ownerId)
-                                );
+                                var maybeBlocked = availabilityFacade.blockRandomOf(parentId, ownerId);
+                                itemAddingResult.set(maybeBlocked.isPresent());
                             });
         return itemAddingResult.get();
     }

@@ -8,7 +8,7 @@ interface AvailabilityRepo {
 
     void save(AvailabilityUnit availabilityUnit);
 
-    void saveAll(Collection<AvailabilityUnit> all);
+    void saveGrouped(GroupedAvailability groupedAvailability);
 
     void deleteByResourceId(ResourceId resourceId);
 

@@ -14,6 +14,11 @@ class InMemoryAvailabilityRepo extends InMemoryAbstractRepo<AvailabilityUnitId, 
             resourceId -> availabilityUnit -> resourceId.equals(availabilityUnit.resourceId());
 
     @Override
+    public void saveGrouped(GroupedAvailability groupedAvailability) {
+        saveAll(groupedAvailability.units());
+    }
+
+    @Override
     public void deleteByResourceId(ResourceId resourceId) {
         deleteBy(PREDICATE_FACTORY.apply(resourceId));
     }
