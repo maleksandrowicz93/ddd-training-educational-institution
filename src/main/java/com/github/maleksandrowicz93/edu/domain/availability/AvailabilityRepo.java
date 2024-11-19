@@ -6,9 +6,11 @@ import java.util.Optional;
 
 interface AvailabilityRepo {
 
-    void save(AvailabilityUnit availabilityUnit);
+    void saveNew(AvailabilityUnit availabilityUnit);
 
-    void saveGrouped(GroupedAvailability groupedAvailability);
+    void saveNew(GroupedAvailability groupedAvailability);
+
+    boolean saveCheckingVersion(AvailabilityUnit availabilityUnit);
 
     void deleteByResourceId(ResourceId resourceId);
 
@@ -17,8 +19,6 @@ interface AvailabilityRepo {
     void deleteAllByParentId(ResourceId parentId);
 
     Optional<AvailabilityUnit> findByResourceId(ResourceId resourceId);
-
-    List<AvailabilityUnit> findAllByIds(Collection<ResourceId> resourceIds);
 
     List<AvailabilityUnit> findAllByParentId(ResourceId parentId);
 

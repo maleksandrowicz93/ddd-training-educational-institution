@@ -17,24 +17,42 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
 
     @Getter
     final AvailabilityUnitId id;
+    @Getter
     final ResourceId parentId;
+    @Getter
     final ResourceId resourceId;
     Blockade blockade;
+    @Getter
+    int version = 0;
 
-    private AvailabilityUnit(ResourceId resourceId, Blockade blockade) {
-        this(AvailabilityUnitId.newOne(), null, resourceId, blockade);
-    }
-
-    private AvailabilityUnit(ResourceId parentId, ResourceId resourceId, Blockade blockade) {
-        this(AvailabilityUnitId.newOne(), parentId, resourceId, blockade);
+    private AvailabilityUnit(
+            AvailabilityUnitId id,
+            ResourceId parentId,
+            ResourceId resourceId,
+            Blockade blockade
+    ) {
+        this.id = id;
+        this.parentId = parentId;
+        this.resourceId = resourceId;
+        this.blockade = blockade;
     }
 
     static AvailabilityUnit forParent(ResourceId parentId) {
-        return new AvailabilityUnit(parentId, ResourceId.newOne(), Blockade.NONE);
+        return new AvailabilityUnit(
+                AvailabilityUnitId.newOne(),
+                parentId,
+                ResourceId.newOne(),
+                Blockade.NONE
+        );
     }
 
     static AvailabilityUnit blocked(ResourceId resourceId, OwnerId ownerId) {
-        return new AvailabilityUnit(resourceId, Blockade.by(ownerId));
+        return new AvailabilityUnit(
+                AvailabilityUnitId.newOne(),
+                null,
+                resourceId,
+                Blockade.by(ownerId)
+        );
     }
 
     boolean block(OwnerId ownerId) {
@@ -71,17 +89,13 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
         return blockade.blockedBy(ownerId);
     }
 
-    ResourceId parentId() {
-        return parentId;
-    }
-
-    ResourceId resourceId() {
-        return resourceId;
-    }
-
     Optional<OwnerId> owner() {
         return blockade.byNone()
                 ? Optional.empty()
                 : Optional.of(blockade.blockedBy());
+    }
+
+    void incrementVersion() {
+        version++;
     }
 }

@@ -5,6 +5,7 @@ import com.github.maleksandrowicz93.edu.common.infra.InMemoryAbstractRepo;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -14,8 +15,26 @@ class InMemoryAvailabilityRepo extends InMemoryAbstractRepo<AvailabilityUnitId, 
             resourceId -> availabilityUnit -> resourceId.equals(availabilityUnit.resourceId());
 
     @Override
-    public void saveGrouped(GroupedAvailability groupedAvailability) {
+    public void saveNew(AvailabilityUnit availabilityUnit) {
+        save(availabilityUnit);
+    }
+
+    @Override
+    public void saveNew(GroupedAvailability groupedAvailability) {
         saveAll(groupedAvailability.units());
+    }
+
+    @Override
+    public boolean saveCheckingVersion(AvailabilityUnit availabilityUnit) {
+        var updated = new AtomicBoolean(false);
+        findById(availabilityUnit.id())
+                .filter(found -> found.version() == availabilityUnit.version())
+                .ifPresent(found -> {
+                    found.incrementVersion();
+                    save(found);
+                    updated.set(true);
+                });
+        return updated.get();
     }
 
     @Override
@@ -36,11 +55,6 @@ class InMemoryAvailabilityRepo extends InMemoryAbstractRepo<AvailabilityUnitId, 
     @Override
     public Optional<AvailabilityUnit> findByResourceId(ResourceId resourceId) {
         return findBy(PREDICATE_FACTORY.apply(resourceId));
-    }
-
-    @Override
-    public List<AvailabilityUnit> findAllByIds(Collection<ResourceId> resourceIds) {
-        return findAllBy(availabilityUnit -> resourceIds.contains(availabilityUnit.resourceId()));
     }
 
     @Override
