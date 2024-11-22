@@ -1,6 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.library;
 
-import com.github.maleksandrowicz93.edu.domain.library.bookAccident.BookAccidents;
+import com.github.maleksandrowicz93.edu.domain.library.bookAccidents.BookAccidents;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookEditionCopies;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookFunding;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BooksBag;
