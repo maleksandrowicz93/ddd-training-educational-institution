@@ -17,6 +17,12 @@ public class AvailabilityReadModel {
 
     AvailabilityRepo availabilityRepo;
 
+    public boolean isResourceAvailable(ResourceId resourceId) {
+        return availabilityRepo.findByResourceId(resourceId)
+                               .map(AvailabilityUnit::isFree)
+                               .orElse(false);
+    }
+
     public Optional<OwnerId> findResourceOwner(ResourceId resourceId) {
         return availabilityRepo.findByResourceId(resourceId)
                                .flatMap(AvailabilityUnit::owner);

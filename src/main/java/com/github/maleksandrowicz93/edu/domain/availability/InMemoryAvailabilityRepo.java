@@ -1,11 +1,11 @@
 package com.github.maleksandrowicz93.edu.domain.availability;
 
 import com.github.maleksandrowicz93.edu.common.infra.InMemoryAbstractRepo;
+import com.github.maleksandrowicz93.edu.common.infra.OptimisticLockingException;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -25,16 +25,18 @@ class InMemoryAvailabilityRepo extends InMemoryAbstractRepo<AvailabilityUnitId, 
     }
 
     @Override
-    public boolean saveCheckingVersion(AvailabilityUnit availabilityUnit) {
-        var updated = new AtomicBoolean(false);
+    public void saveCheckingVersion(AvailabilityUnit availabilityUnit) {
         findById(availabilityUnit.id())
                 .filter(found -> found.version() == availabilityUnit.version())
-                .ifPresent(found -> {
-                    found.incrementVersion();
-                    save(found);
-                    updated.set(true);
-                });
-        return updated.get();
+                .ifPresentOrElse(
+                        found -> {
+                            found.incrementVersion();
+                            save(found);
+                        },
+                        () -> {
+                            throw new OptimisticLockingException("Conflict");
+                        }
+                );
     }
 
     @Override

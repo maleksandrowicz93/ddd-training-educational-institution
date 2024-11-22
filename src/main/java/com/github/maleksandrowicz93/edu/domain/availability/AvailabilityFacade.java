@@ -33,6 +33,11 @@ public class AvailabilityFacade {
         availabilityRepo.saveNew(GroupedAvailability.of(parentId, unitsNumber));
     }
 
+    public void createAvailabilityUnitsForParent(ResourceId parentId, Collection<ResourceId> resourceIds) {
+        log.info("Creating availability units of resource {} for parent {}...", resourceIds, parentId);
+        availabilityRepo.saveNew(GroupedAvailability.of(parentId, resourceIds));
+    }
+
     public void deleteAvailabilityUnitByResourceId(ResourceId resourceId) {
         log.info("Deleting availability unit for resource {}...", resourceId);
         availabilityRepo.deleteByResourceId(resourceId);
@@ -61,10 +66,8 @@ public class AvailabilityFacade {
             var randomResource = getRandomResource(resourcesToBlock);
             var blocked = randomResource.block(ownerId);
             if (blocked) {
-                var updated = availabilityRepo.saveCheckingVersion(randomResource);
-                if (updated) {
-                    return Optional.of(randomResource.resourceId());
-                }
+                availabilityRepo.saveCheckingVersion(randomResource);
+                return Optional.of(randomResource.resourceId());
             }
             resourcesToBlock.remove(randomResource);
         }
@@ -94,11 +97,9 @@ public class AvailabilityFacade {
                                 availabilityUnit -> {
                                     var blocked = availabilityUnit.block(ownerId);
                                     if (blocked) {
-                                        var updated = availabilityRepo.saveCheckingVersion(availabilityUnit);
-                                        if (updated) {
-                                            blockingResult.set(true);
-                                            return;
-                                        }
+                                        availabilityRepo.saveCheckingVersion(availabilityUnit);
+                                        blockingResult.set(true);
+                                        return;
                                     }
                                     log.info("Resource {} was not blocked by owner{}", resourceId, ownerId);
                                 },
@@ -119,11 +120,9 @@ public class AvailabilityFacade {
                                 availabilityUnit -> {
                                     var released = availabilityUnit.release(ownerId);
                                     if (released) {
-                                        var updated = availabilityRepo.saveCheckingVersion(availabilityUnit);
-                                        if (updated) {
-                                            releasingResult.set(true);
-                                            return;
-                                        }
+                                        availabilityRepo.saveCheckingVersion(availabilityUnit);
+                                        releasingResult.set(true);
+                                        return;
                                     }
                                     log.info("Resource {} was not released by owner{}", resourceId, ownerId);
                                 },
@@ -133,5 +132,9 @@ public class AvailabilityFacade {
                                 )
                         );
         return releasingResult.get();
+    }
+
+    public void releaseAll(Collection<ResourceId> resourceIds, OwnerId ownerId) {
+        resourceIds.forEach(resourceId -> release(resourceId, ownerId));
     }
 }

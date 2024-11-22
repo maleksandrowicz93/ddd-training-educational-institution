@@ -46,6 +46,15 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
         );
     }
 
+    static AvailabilityUnit forParent(ResourceId parentId, ResourceId resourceId) {
+        return new AvailabilityUnit(
+                AvailabilityUnitId.newOne(),
+                parentId,
+                resourceId,
+                Blockade.NONE
+        );
+    }
+
     static AvailabilityUnit blocked(ResourceId resourceId, OwnerId ownerId) {
         return new AvailabilityUnit(
                 AvailabilityUnitId.newOne(),
