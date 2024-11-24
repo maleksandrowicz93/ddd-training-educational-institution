@@ -15,7 +15,6 @@ import static lombok.AccessLevel.PRIVATE;
 public class LibraryCardCreation {
 
     LendingReadModel lendingReadModel;
-    LendingRepo lendingRepo;
     LibraryCardRepo libraryCardRepo;
 
     public Optional<LibraryCardId> createLibraryCart(ReaderId readerId) {
@@ -32,7 +31,6 @@ public class LibraryCardCreation {
         var lendingIds = lendingReadModel.findActiveLendingIdsOf(readerId);
         if (lendingIds.isEmpty()) {
             libraryCardRepo.deleteByReaderId(readerId);
-            lendingRepo.deleteAllByIds(lendingIds);
             return true;
         }
         return false;
