@@ -16,7 +16,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class LendingProlongation {
 
-    LendingReadModel lendingReadModel;
+    LendingsReadModel lendingsReadModel;
     LendingRepo lendingRepo;
 
     public boolean prolongLending(LendingId lendingId) {
@@ -42,7 +42,7 @@ public class LendingProlongation {
     }
 
     public void updateProlongPolicies(ReaderId readerId, ProlongPolicies prolongPolicies) {
-        var lendingIds = lendingReadModel.findActiveLendingIdsOf(readerId);
+        var lendingIds = lendingsReadModel.findActiveLendingIdsOf(readerId);
         var lendings = lendingRepo.findAllByIds(lendingIds);
         lendings.updateProlongPolicies(prolongPolicies);
         lendingRepo.saveCheckingVersion(lendings);

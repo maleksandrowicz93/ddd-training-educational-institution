@@ -5,9 +5,9 @@ import com.github.maleksandrowicz93.edu.domain.library.bookAccidents.BookAcciden
 import com.github.maleksandrowicz93.edu.domain.library.bookAvailability.BookAvailabilityFacade;
 import com.github.maleksandrowicz93.edu.domain.library.bookInventory.BookInventoryReadModel;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingId;
-import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingReadModel;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRegistration;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRequest;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingsReadModel;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ISBN;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class BookLendingFacade {
 
     BookInventoryReadModel bookInventoryReadModel;
-    LendingReadModel lendingReadModel;
+    LendingsReadModel lendingsReadModel;
     BookAvailabilityFacade bookAvailabilityFacade;
     LendingRegistration lendingRegistration;
     BookAccidents bookAccidents;
@@ -72,9 +72,9 @@ public class BookLendingFacade {
     @Transactional
     public void returnBook(LendingId lendingId, ReaderId readerId) {
         lendingRegistration.registerReturn(lendingId, readerId);
-        var bookInstanceId = lendingReadModel.getBookInstanceIdOf(lendingId);
+        var bookInstanceId = lendingsReadModel.getBookInstanceIdOf(lendingId);
         bookAvailabilityFacade.releaseBook(bookInstanceId, readerId);
-        if (lendingReadModel.isOverdue(lendingId)) {
+        if (lendingsReadModel.isOverdue(lendingId)) {
             bookAccidents.registerOverdue(readerId);
         }
     }
@@ -82,9 +82,9 @@ public class BookLendingFacade {
     @Transactional
     public void returnBooks(Collection<LendingId> lendingIds, ReaderId readerId) {
         lendingRegistration.registerBatchReturn(lendingIds, readerId);
-        var bookInstanceIds = lendingReadModel.findAllBookInstanceIdsOf(lendingIds);
+        var bookInstanceIds = lendingsReadModel.findAllBookInstanceIdsOf(lendingIds);
         bookAvailabilityFacade.releaseBooks(bookInstanceIds, readerId);
-        if (lendingReadModel.isAnyOverdue(lendingIds)) {
+        if (lendingsReadModel.isAnyOverdue(lendingIds)) {
             bookAccidents.registerOverdue(readerId);
         }
     }

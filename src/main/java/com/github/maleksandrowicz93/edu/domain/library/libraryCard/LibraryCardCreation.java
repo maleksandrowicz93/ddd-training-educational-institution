@@ -14,7 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class LibraryCardCreation {
 
-    LendingReadModel lendingReadModel;
+    LendingsReadModel lendingsReadModel;
     LibraryCardRepo libraryCardRepo;
 
     public Optional<LibraryCardId> createLibraryCart(ReaderId readerId) {
@@ -28,7 +28,7 @@ public class LibraryCardCreation {
 
     @Transactional
     public boolean deleteLibraryCard(ReaderId readerId) {
-        var lendingIds = lendingReadModel.findActiveLendingIdsOf(readerId);
+        var lendingIds = lendingsReadModel.findActiveLendingIdsOf(readerId);
         if (lendingIds.isEmpty()) {
             libraryCardRepo.deleteByReaderId(readerId);
             return true;

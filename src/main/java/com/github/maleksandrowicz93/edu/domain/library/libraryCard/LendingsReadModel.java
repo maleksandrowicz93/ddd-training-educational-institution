@@ -6,7 +6,7 @@ import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import java.util.Collection;
 import java.util.Optional;
 
-public class LendingReadModel {
+public class LendingsReadModel {
 
     LibraryCardRepo libraryCardRepo;
     LendingRepo lendingRepo;
