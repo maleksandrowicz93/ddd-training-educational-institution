@@ -22,6 +22,7 @@ class Lending {
     final LendingId id;
     @Getter
     final BookInstanceId bookInstanceId;
+    final LocalDate startDate = LocalDate.now();
     LocalDate dueDate;
     LocalDate completionDate;
     ProlongPolicies prolongPolicies;
@@ -100,24 +101,15 @@ class Lending {
                 : LocalDate.now().isAfter(dueDate);
     }
 
-    long overdueDays() {
-        if (isOverdue()) {
-            var duration = isCompleted()
-                    ? Duration.between(completionDate, dueDate)
-                    : Duration.between(LocalDate.now(), dueDate);
-            return duration.toDays();
-        }
-        return 0;
-    }
-
     private ProlongationContext prolongationContext(Duration duration) {
-        return new ProlongationContext(
-                id,
-                bookInstanceId,
-                dueDate,
-                completionDate,
-                prolongationCounter,
-                duration
-        );
+        return ProlongationContext.builder()
+                                  .lendingId(id)
+                                  .bookInstanceId(bookInstanceId)
+                                  .startDate(startDate)
+                                  .dueDate(dueDate)
+                                  .completionDate(completionDate)
+                                  .prolongationCounter(prolongationCounter)
+                                  .requestedDuration(duration)
+                                  .build();
     }
 }
