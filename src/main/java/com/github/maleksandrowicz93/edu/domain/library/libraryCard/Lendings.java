@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -22,21 +21,6 @@ class Lendings {
     static final Lendings EMPTY = new Lendings(Set.of());
 
     Collection<Lending> all;
-
-    static Lendings singular(
-            BookInstanceId bookInstanceId,
-            ProlongPolicies prolongPolicies
-    ) {
-        return from(Set.of(bookInstanceId), prolongPolicies);
-    }
-
-    static Lendings singular(
-            BookInstanceId bookInstanceId,
-            ProlongPolicies prolongPolicies,
-            Duration duration
-    ) {
-        return from(Set.of(bookInstanceId), prolongPolicies, duration);
-    }
 
     static Lendings from(
             Collection<BookInstanceId> bookInstanceIds,
@@ -105,7 +89,7 @@ class Lendings {
 
     Collection<BookInstanceId> bookIds() {
         return all.stream()
-                  .map(Lending::bookId)
+                  .map(Lending::bookInstanceId)
                   .collect(toSet());
     }
 
@@ -117,7 +101,8 @@ class Lendings {
         return all.isEmpty();
     }
 
-    Lending first() {
-        return List.copyOf(all).getFirst();
+    boolean isAnyOverdue() {
+        return all.stream()
+                  .anyMatch(Lending::isOverdue);
     }
 }

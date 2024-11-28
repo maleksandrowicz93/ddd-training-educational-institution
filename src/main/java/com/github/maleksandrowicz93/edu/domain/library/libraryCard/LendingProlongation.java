@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import lombok.RequiredArgsConstructor;
@@ -45,7 +45,7 @@ public class LendingProlongation {
         var lendingIds = lendingReadModel.findActiveLendingIdsOf(readerId);
         var lendings = lendingRepo.findAllByIds(lendingIds);
         lendings.updateProlongPolicies(prolongPolicies);
-        lendingRepo.saveNew(lendings);
+        lendingRepo.saveCheckingVersion(lendings);
     }
 
     private boolean prolongLending(
@@ -68,7 +68,7 @@ public class LendingProlongation {
         var prolongedLendings = prolongationAction.apply(lendings);
         if (!prolongedLendings.empty()) {
             var changedLendings = lendings.filterBy(prolongedLendings.ids());
-            lendingRepo.saveNew(changedLendings);
+            lendingRepo.saveCheckingVersion(changedLendings);
         }
         return prolongedLendings;
     }

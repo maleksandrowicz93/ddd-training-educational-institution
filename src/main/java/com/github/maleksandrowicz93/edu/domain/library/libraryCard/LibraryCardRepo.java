@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.common.infra.OptimisticLockingException;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;

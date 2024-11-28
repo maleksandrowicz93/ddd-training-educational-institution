@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.common.infra.OptimisticLockingException;
 
@@ -14,8 +14,6 @@ interface LendingRepo {
     void saveCheckingVersion(Lending lending) throws OptimisticLockingException;
 
     void saveCheckingVersion(Lendings lendings) throws OptimisticLockingException;
-
-    void deleteAllByIds(Collection<LendingId> ids);
 
     Lendings findAllByIds(Collection<LendingId> ids);
 

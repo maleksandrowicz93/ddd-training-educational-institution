@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.ISBN;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;

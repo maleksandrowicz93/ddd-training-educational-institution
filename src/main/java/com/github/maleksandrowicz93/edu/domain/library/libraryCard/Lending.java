@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
 import lombok.Getter;
@@ -19,18 +19,16 @@ class Lending {
     @Getter
     final LendingId id;
     @Getter
-    final BookInstanceId bookId;
+    final BookInstanceId bookInstanceId;
     LocalDate to;
     LocalDate completionDate;
     ProlongPolicies prolongPolicies;
-    @Getter
-    boolean completed = false;
     @Getter
     int version = 0;
 
     private Lending(BookInstanceId bookInstanceId, Duration duration, ProlongPolicies prolongPolicies) {
         id = LendingId.newOne();
-        this.bookId = bookInstanceId;
+        this.bookInstanceId = bookInstanceId;
         to = LocalDate.now().plusDays(duration.toDays());
         this.prolongPolicies = prolongPolicies;
     }
@@ -56,7 +54,7 @@ class Lending {
     }
 
     boolean prolongBook(Duration duration) {
-        if (completed) {
+        if (isCompleted()) {
             return false;
         }
         var canBeProlonged = prolongPolicies.examine(duration);
@@ -67,8 +65,7 @@ class Lending {
     }
 
     void complete() {
-        if (!completed) {
-            completed = true;
+        if (!isCompleted()) {
             completionDate = LocalDate.now();
             if (to.isAfter(completionDate)) {
                 to = completionDate;
@@ -77,7 +74,7 @@ class Lending {
     }
 
     void updateProlongPolicies(ProlongPolicies prolongPolicies) {
-        if (completed) {
+        if (isCompleted()) {
             return;
         }
         this.prolongPolicies = prolongPolicies;
@@ -88,18 +85,18 @@ class Lending {
     }
 
     boolean isCompleted() {
-        return completed;
+        return completionDate != null;
     }
 
     boolean isOverdue() {
-        return completed
+        return isCompleted()
                 ? completionDate.isAfter(to)
                 : LocalDate.now().isAfter(to);
     }
 
     long overdueDays() {
         if (isOverdue()) {
-            var duration = completed
+            var duration = isCompleted()
                     ? Duration.between(completionDate, to)
                     : Duration.between(LocalDate.now(), to);
             return duration.toDays();

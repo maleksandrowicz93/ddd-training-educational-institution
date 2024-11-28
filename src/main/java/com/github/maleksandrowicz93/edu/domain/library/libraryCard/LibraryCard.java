@@ -1,4 +1,4 @@
-package com.github.maleksandrowicz93.edu.domain.library.bookLending;
+package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -43,22 +44,22 @@ class LibraryCard {
         return new LibraryCard(LibraryCardId.newOne(), readerId, limit);
     }
 
-    Lendings lendBook(
+    Optional<Lending> lendBook(
             BookInstanceId bookInstanceId,
             ProlongPolicies prolongPolicies
     ) {
         return lendBook(
-                () -> Lendings.singular(bookInstanceId, prolongPolicies)
+                () -> Lending.of(bookInstanceId, prolongPolicies)
         );
     }
 
-    Lendings lendBook(
+    Optional<Lending> lendBook(
             BookInstanceId bookInstanceId,
             ProlongPolicies prolongPolicies,
             Duration duration
     ) {
         return lendBook(
-                () -> Lendings.singular(bookInstanceId, prolongPolicies, duration)
+                () -> Lending.of(bookInstanceId, prolongPolicies, duration)
         );
     }
 
@@ -81,15 +82,15 @@ class LibraryCard {
         );
     }
 
-    private Lendings lendBook(
-            Supplier<Lendings> lendingsFactory
+    private Optional<Lending> lendBook(
+            Supplier<Lending> lendingFactory
     ) {
         if (lendings.size() >= limit) {
-            return Lendings.EMPTY;
+            return Optional.empty();
         }
-        var newLendings = lendingsFactory.get();
-        lendings.addAll(newLendings.ids());
-        return newLendings;
+        var newLending = lendingFactory.get();
+        lendings.add(newLending.id());
+        return Optional.of(lendingFactory.get());
     }
 
     private Lendings lendBooks(
@@ -112,7 +113,7 @@ class LibraryCard {
     }
 
     void changeLimit(int limit) {
-        if (limit >= 0) {
+        if (limit >= lendings.size()) {
             this.limit = limit;
         }
     }

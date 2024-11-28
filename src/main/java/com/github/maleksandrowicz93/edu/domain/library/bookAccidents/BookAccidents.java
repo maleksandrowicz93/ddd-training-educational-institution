@@ -46,4 +46,11 @@ public class BookAccidents {
             readerScoring.subtractPoint(perpetrator);
         }
     }
+
+    public void registerOverdue(ReaderId readerId) {
+        var readerType = readerCatalog.getReaderTypeById(readerId);
+        if (PUNISHABLE.contains(readerType)) {
+            readerScoring.subtractPoint(readerId);
+        }
+    }
 }

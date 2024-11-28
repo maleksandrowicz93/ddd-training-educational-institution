@@ -1,7 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.library.readerRegistration;
 
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LibraryCardCreation;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LibraryCardId;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LibraryCardCreation;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LibraryCardId;
 import com.github.maleksandrowicz93.edu.domain.library.readerCatalog.Reader;
 import com.github.maleksandrowicz93.edu.domain.library.readerCatalog.ReaderCatalog;
 import com.github.maleksandrowicz93.edu.domain.library.readerScoring.ReaderScoring;

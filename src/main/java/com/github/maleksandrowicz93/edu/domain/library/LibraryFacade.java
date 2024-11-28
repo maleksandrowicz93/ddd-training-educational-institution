@@ -5,13 +5,13 @@ import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookEditionCo
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookFunding;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BooksBag;
 import com.github.maleksandrowicz93.edu.domain.library.bookInventory.Book;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.BookLending;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LendingId;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LendingProlongation;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LendingRequest;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.LibraryCardId;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.ProlongPolicies;
-import com.github.maleksandrowicz93.edu.domain.library.bookLending.ProlongedLendings;
+import com.github.maleksandrowicz93.edu.domain.library.bookLending.BookLendingFacade;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingId;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingProlongation;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRequest;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LibraryCardId;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.ProlongPolicies;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.ProlongedLendings;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistration;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistrationRequest;
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
@@ -34,7 +34,7 @@ public class LibraryFacade {
     ReaderRegistration readerRegistration;
     BookFunding bookFunding;
     BookAccidents bookAccidents;
-    BookLending bookLending;
+    BookLendingFacade bookLending;
     LendingProlongation lendingProlongation;
 
     public Optional<LibraryCardId> addReader(ReaderRegistrationRequest readerRegistrationRequest) {

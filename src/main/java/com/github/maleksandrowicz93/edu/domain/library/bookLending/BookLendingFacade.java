@@ -1,8 +1,13 @@
 package com.github.maleksandrowicz93.edu.domain.library.bookLending;
 
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
+import com.github.maleksandrowicz93.edu.domain.library.bookAccidents.BookAccidents;
 import com.github.maleksandrowicz93.edu.domain.library.bookAvailability.BookAvailabilityFacade;
 import com.github.maleksandrowicz93.edu.domain.library.bookInventory.BookInventoryReadModel;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingId;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingReadModel;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRegistration;
+import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRequest;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ISBN;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +24,13 @@ import static lombok.AccessLevel.PRIVATE;
 
 @RequiredArgsConstructor(access = PACKAGE)
 @FieldDefaults(level = PRIVATE, makeFinal = true)
-public class BookLending {
+public class BookLendingFacade {
 
-    BookAvailabilityFacade bookAvailabilityFacade;
     BookInventoryReadModel bookInventoryReadModel;
-    LibraryCardRepo libraryCardRepo;
-    LendingRepo lendingRepo;
+    LendingReadModel lendingReadModel;
+    BookAvailabilityFacade bookAvailabilityFacade;
+    LendingRegistration lendingRegistration;
+    BookAccidents bookAccidents;
 
     @Transactional
     public Optional<LendingId> lenBook(ISBN isbn, ReaderId readerId) {
@@ -34,18 +40,13 @@ public class BookLending {
             return Optional.empty();
         }
         var lendingId = new AtomicReference<LendingId>();
-        takenBookInstanceId.ifPresent(bookInstanceId -> {
-            var libraryCard = libraryCardRepo.getByReaderId(readerId);
-            var lendings = libraryCard.lendBook(bookInstanceId, ProlongPolicies.EMPTY);
-            if (lendings.empty()) {
-                bookAvailabilityFacade.releaseBook(bookInstanceId, readerId);
-                return;
-            }
-            var lending = lendings.first();
-            libraryCardRepo.saveCheckingVersion(libraryCard);
-            lendingRepo.saveNew(lending);
-            lendingId.set(lending.id());
-        });
+        takenBookInstanceId.ifPresent(
+                bookId -> lendingRegistration.registerLending(readerId, bookId)
+                                             .ifPresentOrElse(
+                                                     lendingId::set,
+                                                     () -> bookAvailabilityFacade.releaseBook(bookId, readerId)
+                                             )
+        );
         return Optional.ofNullable(lendingId.get());
     }
 
@@ -60,37 +61,31 @@ public class BookLending {
         if (takenBooks.isEmpty()) {
             return Set.of();
         }
-        var libraryCard = libraryCardRepo.getByReaderId(readerId);
-        var lendings = libraryCard.lendBooks(takenBooks, ProlongPolicies.EMPTY);
-        if (lendings.empty()) {
+        var lendingIds = lendingRegistration.registerBatchLending(readerId, takenBooks);
+        if (lendingIds.isEmpty()) {
             bookAvailabilityFacade.releaseBooks(takenBooks, readerId);
             return Set.of();
         }
-        libraryCardRepo.saveCheckingVersion(libraryCard);
-        lendingRepo.saveNew(lendings);
-        return lendings.ids();
+        return lendingIds;
     }
 
     @Transactional
     public void returnBook(LendingId lendingId, ReaderId readerId) {
-        var lending = lendingRepo.getById(lendingId);
-        lending.complete();
-        var libraryCard = libraryCardRepo.getByReaderId(readerId);
-        libraryCard.returnBook(lendingId);
-        libraryCardRepo.saveCheckingVersion(libraryCard);
-        lendingRepo.saveCheckingVersion(lending);
-        bookAvailabilityFacade.releaseBook(lending.bookId(), readerId);
+        lendingRegistration.registerReturn(lendingId, readerId);
+        var bookInstanceId = lendingReadModel.getBookInstanceIdOf(lendingId);
+        bookAvailabilityFacade.releaseBook(bookInstanceId, readerId);
+        if (lendingReadModel.isOverdue(lendingId)) {
+            bookAccidents.registerOverdue(readerId);
+        }
     }
 
     @Transactional
     public void returnBooks(Collection<LendingId> lendingIds, ReaderId readerId) {
-        var lendings = lendingRepo.findAllByIds(lendingIds);
-        var lentBooks = lendings.bookIds();
-        lendings.complete();
-        var libraryCard = libraryCardRepo.getByReaderId(readerId);
-        libraryCard.returnBooks(lendingIds);
-        libraryCardRepo.saveCheckingVersion(libraryCard);
-        lendingRepo.saveCheckingVersion(lendings);
-        bookAvailabilityFacade.releaseBooks(lentBooks, readerId);
+        lendingRegistration.registerBatchReturn(lendingIds, readerId);
+        var bookInstanceIds = lendingReadModel.findAllBookInstanceIdsOf(lendingIds);
+        bookAvailabilityFacade.releaseBooks(bookInstanceIds, readerId);
+        if (lendingReadModel.isAnyOverdue(lendingIds)) {
+            bookAccidents.registerOverdue(readerId);
+        }
     }
 }
