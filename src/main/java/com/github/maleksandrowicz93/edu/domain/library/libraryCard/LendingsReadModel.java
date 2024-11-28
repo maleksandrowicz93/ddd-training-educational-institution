@@ -1,23 +1,20 @@
 package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
-import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.Optional;
 
+import static lombok.AccessLevel.PACKAGE;
+import static lombok.AccessLevel.PRIVATE;
+
+@RequiredArgsConstructor(access = PACKAGE)
+@FieldDefaults(level = PRIVATE, makeFinal = true)
 public class LendingsReadModel {
 
-    LibraryCardRepo libraryCardRepo;
     LendingRepo lendingRepo;
-
-    public Collection<LendingId> findActiveLendingIdsOf(ReaderId readerId) {
-        return libraryCardRepo.findByReaderId(readerId)
-                              .map(LibraryCard::lendings)
-                              .stream()
-                              .flatMap(Collection::stream)
-                              .toList();
-    }
 
     public Collection<BookInstanceId> findAllBookInstanceIdsOf(Collection<LendingId> lendingIds) {
         return lendingRepo.findAllByIds(lendingIds)

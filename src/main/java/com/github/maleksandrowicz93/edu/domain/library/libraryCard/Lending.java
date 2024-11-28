@@ -1,5 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongationContext;
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -20,16 +22,18 @@ class Lending {
     final LendingId id;
     @Getter
     final BookInstanceId bookInstanceId;
-    LocalDate to;
+    LocalDate dueDate;
     LocalDate completionDate;
     ProlongPolicies prolongPolicies;
+    @Getter
+    int prolongationCounter = 0;
     @Getter
     int version = 0;
 
     private Lending(BookInstanceId bookInstanceId, Duration duration, ProlongPolicies prolongPolicies) {
         id = LendingId.newOne();
         this.bookInstanceId = bookInstanceId;
-        to = LocalDate.now().plusDays(duration.toDays());
+        dueDate = LocalDate.now().plusDays(duration.toDays());
         this.prolongPolicies = prolongPolicies;
     }
 
@@ -57,9 +61,11 @@ class Lending {
         if (isCompleted()) {
             return false;
         }
-        var canBeProlonged = prolongPolicies.examine(duration);
+        var prolongationContext = prolongationContext(duration);
+        var canBeProlonged = prolongPolicies.examine(prolongationContext);
         if (canBeProlonged) {
-            to = to.plusDays(duration.toDays());
+            dueDate = dueDate.plusDays(duration.toDays());
+            prolongationCounter++;
         }
         return canBeProlonged;
     }
@@ -67,8 +73,8 @@ class Lending {
     void complete() {
         if (!isCompleted()) {
             completionDate = LocalDate.now();
-            if (to.isAfter(completionDate)) {
-                to = completionDate;
+            if (dueDate.isAfter(completionDate)) {
+                dueDate = completionDate;
             }
         }
     }
@@ -90,17 +96,28 @@ class Lending {
 
     boolean isOverdue() {
         return isCompleted()
-                ? completionDate.isAfter(to)
-                : LocalDate.now().isAfter(to);
+                ? completionDate.isAfter(dueDate)
+                : LocalDate.now().isAfter(dueDate);
     }
 
     long overdueDays() {
         if (isOverdue()) {
             var duration = isCompleted()
-                    ? Duration.between(completionDate, to)
-                    : Duration.between(LocalDate.now(), to);
+                    ? Duration.between(completionDate, dueDate)
+                    : Duration.between(LocalDate.now(), dueDate);
             return duration.toDays();
         }
         return 0;
+    }
+
+    private ProlongationContext prolongationContext(Duration duration) {
+        return new ProlongationContext(
+                id,
+                bookInstanceId,
+                dueDate,
+                completionDate,
+                prolongationCounter,
+                duration
+        );
     }
 }

@@ -10,7 +10,7 @@ import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingId;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingProlongation;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRequest;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LibraryCardId;
-import com.github.maleksandrowicz93.edu.domain.library.libraryCard.ProlongPolicies;
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.ProlongedLendings;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistration;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistrationRequest;

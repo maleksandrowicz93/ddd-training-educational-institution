@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
 import com.github.maleksandrowicz93.edu.common.infra.Transactional;
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import lombok.RequiredArgsConstructor;

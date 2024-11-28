@@ -1,5 +1,6 @@
 package com.github.maleksandrowicz93.edu.domain.library.libraryCard;
 
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
 import com.github.maleksandrowicz93.edu.domain.library.shared.ReaderId;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +17,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class LendingProlongation {
 
-    LendingsReadModel lendingsReadModel;
+    LibraryCardReadModel libraryCardReadModel;
     LendingRepo lendingRepo;
 
     public boolean prolongLending(LendingId lendingId) {
@@ -42,7 +43,7 @@ public class LendingProlongation {
     }
 
     public void updateProlongPolicies(ReaderId readerId, ProlongPolicies prolongPolicies) {
-        var lendingIds = lendingsReadModel.findActiveLendingIdsOf(readerId);
+        var lendingIds = libraryCardReadModel.findActiveLendingIdsOf(readerId);
         var lendings = lendingRepo.findAllByIds(lendingIds);
         lendings.updateProlongPolicies(prolongPolicies);
         lendingRepo.saveCheckingVersion(lendings);
