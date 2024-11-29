@@ -1,6 +1,7 @@
 package com.github.maleksandrowicz93.edu.domain.library;
 
 import com.github.maleksandrowicz93.edu.domain.library.bookAccidents.BookAccidents;
+import com.github.maleksandrowicz93.edu.domain.library.bookDemand.BookDemandScheduler;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookEditionCopies;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BookFunding;
 import com.github.maleksandrowicz93.edu.domain.library.bookFunding.BooksBag;
@@ -10,8 +11,8 @@ import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingId;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingProlongation;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LendingRequest;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.LibraryCardId;
-import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
 import com.github.maleksandrowicz93.edu.domain.library.libraryCard.ProlongedLendings;
+import com.github.maleksandrowicz93.edu.domain.library.prolongPolicies.ProlongPolicies;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistration;
 import com.github.maleksandrowicz93.edu.domain.library.readerRegistration.ReaderRegistrationRequest;
 import com.github.maleksandrowicz93.edu.domain.library.shared.BookInstanceId;
@@ -36,6 +37,7 @@ public class LibraryFacade {
     BookAccidents bookAccidents;
     BookLendingFacade bookLending;
     LendingProlongation lendingProlongation;
+    BookDemandScheduler bookDemandScheduler;
 
     public Optional<LibraryCardId> addReader(ReaderRegistrationRequest readerRegistrationRequest) {
         return readerRegistration.registerNewOne(readerRegistrationRequest);
@@ -103,5 +105,13 @@ public class LibraryFacade {
 
     public void updateProlongPolicies(ReaderId readerId, ProlongPolicies prolongPolicies) {
         lendingProlongation.updateProlongPolicies(readerId, prolongPolicies);
+    }
+
+    public void scheduleDemandForBook(ReaderId readerId, ISBN isbn) {
+        bookDemandScheduler.scheduleDemandFor(readerId, isbn);
+    }
+
+    public void revokeDemandForBook(ReaderId readerId, ISBN isbn) {
+        bookDemandScheduler.revokeDemandFor(readerId, isbn);
     }
 }

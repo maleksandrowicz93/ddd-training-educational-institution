@@ -18,6 +18,8 @@ interface BookEditionCatalog {
 
     Optional<BookEdition> findByIsbn(ISBN isbn);
 
+    Optional<ISBN> findIsbnByBookEditionId(BookEditionId bookEditionId);
+
     default BookEdition getByIsbn(ISBN isbn) {
         return findByIsbn(isbn).orElseThrow();
     }

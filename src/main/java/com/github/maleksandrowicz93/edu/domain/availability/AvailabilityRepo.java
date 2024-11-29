@@ -25,4 +25,6 @@ interface AvailabilityRepo {
     List<AvailabilityUnit> findAllByParentId(ResourceId parentId);
 
     List<AvailabilityUnit> findAllByParentIds(Collection<ResourceId> parentIds);
+
+    Optional<ResourceId> findParentIdByResourceId(ResourceId resourceId);
 }

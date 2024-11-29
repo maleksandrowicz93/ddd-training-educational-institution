@@ -44,6 +44,10 @@ public class AvailabilityReadModel {
                                .findFirst();
     }
 
+    public Optional<ResourceId> findParentIdByResourceId(ResourceId resourceId) {
+        return availabilityRepo.findParentIdByResourceId(resourceId);
+    }
+
     public GroupedAvailabilitySummary getParentSummary(ResourceId parentId) {
         var all = availabilityRepo.findAllByParentId(parentId);
         return all.stream()
