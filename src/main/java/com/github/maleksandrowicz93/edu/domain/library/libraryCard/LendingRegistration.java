@@ -69,6 +69,7 @@ public class LendingRegistration {
 
     //what if special book, only for professor and vip
     //what if professor scheduled demand
+    //what if policy depends on scoring
     //what if...
     private ProlongPolicies assumePolicies(ReaderId readerId) {
         var readerType = readerCatalog.getReaderTypeById(readerId);
