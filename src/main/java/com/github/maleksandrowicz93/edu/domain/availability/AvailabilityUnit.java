@@ -107,4 +107,23 @@ class AvailabilityUnit implements Entity<AvailabilityUnitId> {
     void incrementVersion() {
         version++;
     }
+
+    private record Blockade(
+            OwnerId blockedBy
+    ) {
+
+        private static final Blockade NONE = new Blockade(null);
+
+        private static Blockade by(OwnerId ownerId) {
+            return new Blockade(ownerId);
+        }
+
+        private boolean blockedBy(OwnerId ownerId) {
+            return !byNone() && blockedBy.equals(ownerId);
+        }
+
+        private boolean byNone() {
+            return NONE.equals(this);
+        }
+    }
 }
